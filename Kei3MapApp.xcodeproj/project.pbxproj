@@ -1,0 +1,586 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		67E8DC1F2D0506490001D065 /* Feature in Frameworks */ = {isa = PBXBuildFile; productRef = 67E8DC1E2D0506490001D065 /* Feature */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		67E8DBEF2D05036D0001D065 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 67E8DBD42D05036A0001D065 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 67E8DBDB2D05036A0001D065;
+			remoteInfo = Kei3MapApp;
+		};
+		67E8DBF92D05036D0001D065 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 67E8DBD42D05036A0001D065 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 67E8DBDB2D05036A0001D065;
+			remoteInfo = Kei3MapApp;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		67E8DBDC2D05036A0001D065 /* Kei3MapApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Kei3MapApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		67E8DBEE2D05036D0001D065 /* Kei3MapAppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Kei3MapAppTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		67E8DBF82D05036D0001D065 /* Kei3MapAppUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Kei3MapAppUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		67E8DC1C2D0504960001D065 /* Kei3MapAppPackage */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Kei3MapAppPackage; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		67E8DBDE2D05036A0001D065 /* Kei3MapApp */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = Kei3MapApp;
+			sourceTree = "<group>";
+		};
+		67E8DBF12D05036D0001D065 /* Kei3MapAppTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = Kei3MapAppTests;
+			sourceTree = "<group>";
+		};
+		67E8DBFB2D05036D0001D065 /* Kei3MapAppUITests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = Kei3MapAppUITests;
+			sourceTree = "<group>";
+		};
+/* End PBXFileSystemSynchronizedRootGroup section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		67E8DBD92D05036A0001D065 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				67E8DC1F2D0506490001D065 /* Feature in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		67E8DBEB2D05036D0001D065 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		67E8DBF52D05036D0001D065 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		67E8DBD32D05036A0001D065 = {
+			isa = PBXGroup;
+			children = (
+				67E8DC1C2D0504960001D065 /* Kei3MapAppPackage */,
+				67E8DBDE2D05036A0001D065 /* Kei3MapApp */,
+				67E8DBF12D05036D0001D065 /* Kei3MapAppTests */,
+				67E8DBFB2D05036D0001D065 /* Kei3MapAppUITests */,
+				67E8DC1D2D0506490001D065 /* Frameworks */,
+				67E8DBDD2D05036A0001D065 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		67E8DBDD2D05036A0001D065 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				67E8DBDC2D05036A0001D065 /* Kei3MapApp.app */,
+				67E8DBEE2D05036D0001D065 /* Kei3MapAppTests.xctest */,
+				67E8DBF82D05036D0001D065 /* Kei3MapAppUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		67E8DC1D2D0506490001D065 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		67E8DBDB2D05036A0001D065 /* Kei3MapApp */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 67E8DC022D05036D0001D065 /* Build configuration list for PBXNativeTarget "Kei3MapApp" */;
+			buildPhases = (
+				67E8DBD82D05036A0001D065 /* Sources */,
+				67E8DBD92D05036A0001D065 /* Frameworks */,
+				67E8DBDA2D05036A0001D065 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				67E8DBDE2D05036A0001D065 /* Kei3MapApp */,
+			);
+			name = Kei3MapApp;
+			packageProductDependencies = (
+				67E8DC1E2D0506490001D065 /* Feature */,
+			);
+			productName = Kei3MapApp;
+			productReference = 67E8DBDC2D05036A0001D065 /* Kei3MapApp.app */;
+			productType = "com.apple.product-type.application";
+		};
+		67E8DBED2D05036D0001D065 /* Kei3MapAppTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 67E8DC052D05036D0001D065 /* Build configuration list for PBXNativeTarget "Kei3MapAppTests" */;
+			buildPhases = (
+				67E8DBEA2D05036D0001D065 /* Sources */,
+				67E8DBEB2D05036D0001D065 /* Frameworks */,
+				67E8DBEC2D05036D0001D065 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				67E8DBF02D05036D0001D065 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				67E8DBF12D05036D0001D065 /* Kei3MapAppTests */,
+			);
+			name = Kei3MapAppTests;
+			packageProductDependencies = (
+			);
+			productName = Kei3MapAppTests;
+			productReference = 67E8DBEE2D05036D0001D065 /* Kei3MapAppTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		67E8DBF72D05036D0001D065 /* Kei3MapAppUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 67E8DC082D05036D0001D065 /* Build configuration list for PBXNativeTarget "Kei3MapAppUITests" */;
+			buildPhases = (
+				67E8DBF42D05036D0001D065 /* Sources */,
+				67E8DBF52D05036D0001D065 /* Frameworks */,
+				67E8DBF62D05036D0001D065 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				67E8DBFA2D05036D0001D065 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				67E8DBFB2D05036D0001D065 /* Kei3MapAppUITests */,
+			);
+			name = Kei3MapAppUITests;
+			packageProductDependencies = (
+			);
+			productName = Kei3MapAppUITests;
+			productReference = 67E8DBF82D05036D0001D065 /* Kei3MapAppUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		67E8DBD42D05036A0001D065 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1610;
+				LastUpgradeCheck = 1610;
+				TargetAttributes = {
+					67E8DBDB2D05036A0001D065 = {
+						CreatedOnToolsVersion = 16.1;
+					};
+					67E8DBED2D05036D0001D065 = {
+						CreatedOnToolsVersion = 16.1;
+						TestTargetID = 67E8DBDB2D05036A0001D065;
+					};
+					67E8DBF72D05036D0001D065 = {
+						CreatedOnToolsVersion = 16.1;
+						TestTargetID = 67E8DBDB2D05036A0001D065;
+					};
+				};
+			};
+			buildConfigurationList = 67E8DBD72D05036A0001D065 /* Build configuration list for PBXProject "Kei3MapApp" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 67E8DBD32D05036A0001D065;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 67E8DBDD2D05036A0001D065 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				67E8DBDB2D05036A0001D065 /* Kei3MapApp */,
+				67E8DBED2D05036D0001D065 /* Kei3MapAppTests */,
+				67E8DBF72D05036D0001D065 /* Kei3MapAppUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		67E8DBDA2D05036A0001D065 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		67E8DBEC2D05036D0001D065 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		67E8DBF62D05036D0001D065 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		67E8DBD82D05036A0001D065 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		67E8DBEA2D05036D0001D065 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		67E8DBF42D05036D0001D065 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		67E8DBF02D05036D0001D065 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 67E8DBDB2D05036A0001D065 /* Kei3MapApp */;
+			targetProxy = 67E8DBEF2D05036D0001D065 /* PBXContainerItemProxy */;
+		};
+		67E8DBFA2D05036D0001D065 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 67E8DBDB2D05036A0001D065 /* Kei3MapApp */;
+			targetProxy = 67E8DBF92D05036D0001D065 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		67E8DC002D05036D0001D065 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.1;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		67E8DC012D05036D0001D065 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.1;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		67E8DC032D05036D0001D065 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"Kei3MapApp/Preview Content\"";
+				DEVELOPMENT_TEAM = D2B3JPR4TJ;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = kei.Kei3MapApp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		67E8DC042D05036D0001D065 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"Kei3MapApp/Preview Content\"";
+				DEVELOPMENT_TEAM = D2B3JPR4TJ;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = kei.Kei3MapApp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		67E8DC062D05036D0001D065 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = D2B3JPR4TJ;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.1;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = kei.Kei3MapAppTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Kei3MapApp.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Kei3MapApp";
+			};
+			name = Debug;
+		};
+		67E8DC072D05036D0001D065 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = D2B3JPR4TJ;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.1;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = kei.Kei3MapAppTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Kei3MapApp.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Kei3MapApp";
+			};
+			name = Release;
+		};
+		67E8DC092D05036D0001D065 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = D2B3JPR4TJ;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = kei.Kei3MapAppUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = Kei3MapApp;
+			};
+			name = Debug;
+		};
+		67E8DC0A2D05036D0001D065 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = D2B3JPR4TJ;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = kei.Kei3MapAppUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = Kei3MapApp;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		67E8DBD72D05036A0001D065 /* Build configuration list for PBXProject "Kei3MapApp" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				67E8DC002D05036D0001D065 /* Debug */,
+				67E8DC012D05036D0001D065 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		67E8DC022D05036D0001D065 /* Build configuration list for PBXNativeTarget "Kei3MapApp" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				67E8DC032D05036D0001D065 /* Debug */,
+				67E8DC042D05036D0001D065 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		67E8DC052D05036D0001D065 /* Build configuration list for PBXNativeTarget "Kei3MapAppTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				67E8DC062D05036D0001D065 /* Debug */,
+				67E8DC072D05036D0001D065 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		67E8DC082D05036D0001D065 /* Build configuration list for PBXNativeTarget "Kei3MapAppUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				67E8DC092D05036D0001D065 /* Debug */,
+				67E8DC0A2D05036D0001D065 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		67E8DC1E2D0506490001D065 /* Feature */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Feature;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = 67E8DBD42D05036A0001D065 /* Project object */;
+}
