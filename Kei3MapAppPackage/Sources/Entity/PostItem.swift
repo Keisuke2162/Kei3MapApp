@@ -1,4 +1,5 @@
 import Foundation
+import MapKit
 
 public struct Post: Identifiable {
   public let id = UUID()
@@ -25,4 +26,15 @@ public struct Post: Identifiable {
     .init(title: "上高地", latitude: 36.2426, longitude: 137.6414),
     .init(title: "札幌時計台", latitude: 43.0621, longitude: 141.3544),
   ]
+}
+
+public struct DisplayPostItem: Identifiable {
+  public let id = UUID()
+  public var coordinate: CLLocationCoordinate2D
+  public var items: [Post]
+
+  public init(coordinate: CLLocationCoordinate2D, items: [Post]) {
+    self.coordinate = coordinate
+    self.items = items
+  }
 }
