@@ -18,7 +18,7 @@ jobs:
 
       - name: Archive
         run: | 
-          xcodebuild archive -project Kei3MapApp.xcodeproj -scheme Kei3MapApp -archivePath Kei3MapApp.xcarchive -sdk iphones -configuration Release CODE_SIGNING_ALLOWED=NO
+          xcodebuild archive -project Kei3MapApp.xcodeproj -scheme Kei3MapApp -archivePath Kei3MapApp.xcarchive -sdk iphoneos -configuration Release CODE_SIGNING_ALLOWED=NO
 
       - name: Create ExportOptions.plist
         run: |
