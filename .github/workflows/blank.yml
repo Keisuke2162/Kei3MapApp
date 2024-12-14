@@ -1,36 +1,39 @@
-# This is a basic workflow to help you get started with Actions
+name: Build
 
-name: CI
-
-# Controls when the workflow will run
 on:
-  # Triggers the workflow on push or pull request events but only for the "main" branch
   push:
     branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
 
-  # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
   build:
-    # The type of runner that the job will run on
-    runs-on: ubuntu-latest
+    runs-on: macos-15
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
 
-      # Runs a single command using the runners shell
-      - name: Run a one-line script
-        run: echo Hello, world!
+      - name: Archive
+        run: | 
+          xcodebuild archive -project Kei3MapApp.xcodeproj -scheme Kei3MapApp -archivePath Kei3MapApp.xcarchive -sdk iphones -configuration Release CODE_SIGNING_ALLOWED=NO
 
-      # Runs a set of commands using the runners shell
-      - name: Run a multi-line script
+      - name: Create ExportOptions.plist
         run: |
-          echo Add other actions to build,
-          echo test, and deploy your project.
+          echo '${{ secrets.EXPORT_OPTIONS }}' > ExportOptions.plist
+          cat ExportOptions.plist
+
+      - name: Create Private Key
+        run: |
+          mkdir private_keys
+          echo -n '${{ secrets.APPLE_API_KEY_BASE64 }}' | base64 --decode > ./private_keys/AuthKey_${{ secrets.APPLE_API_ISSUER_ID }}.p8
+
+      - name: Export IPA
+        run: |
+          xcodebuild -exportArchive -archivePath Kei3MapApp.xcarchive -exportOptionsPlist ExportOptions.plist -exportPath Kei3MapApp.ipa -allowProvisioningUpdates -authenticationKeyPath `pwd`/private_keys/AuthKey_${{ secrets.APPLE_API_ISSUER_ID }}.p8 -authenticationKeyID ${{ secrets.APPLE_API_KEY_ID }} -authenticationKeyIssuerID ${{ secrets.APPLE_API_ISSUER_ID }}
+
+      - name: Upload to App Store Connect
+        run: |
+          xcrun altool --upload-app -f Kei3MapApp.ipa/Kei3MapApp.ipa -t ios -u ${{ secrets.APPLE_ID }} -p ${{ secrets.APP_SPECIFIC_PASSWORD }} --type ios
