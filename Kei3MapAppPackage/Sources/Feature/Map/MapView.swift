@@ -97,7 +97,8 @@ public struct MapView: View {
           // サムネイルを表示
           Annotation("", coordinate: post.coordinate) {
             if let item = post.items.first {
-              ThumbnailAnnotationView(imageURL: item.imageURL)
+              // ThumbnailAnnotationView(imageURL: item.imageURL)
+              EmojiAnnotationView(emoji: item.iconString)
             } else {
               Text("")
             }
@@ -144,6 +145,22 @@ public struct MapView: View {
               ProgressView()
           }
       }
+  }
+  
+  //
+  struct EmojiAnnotationView: View {
+    let emoji: String
+
+    var body: some View {
+      ZStack {
+        Circle()
+          .fill(Color.white.opacity(0.8))
+          .frame(width: 48, height: 48)
+        Text(emoji)
+              .foregroundColor(.white)
+              .fontWeight(.bold)
+      }
+    }
   }
 }
 
