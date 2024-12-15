@@ -4,6 +4,7 @@ import MapKit
 import SwiftUI
 
 public class MapViewModel: ObservableObject {
+  // 現在位置取得できない場合のデフォルトの位置情報
   let initialLocation: MapCameraPosition = .region(
     .init(
       center: CLLocationCoordinate2D(latitude: 36.2048, longitude: 138.2529),
@@ -13,7 +14,8 @@ public class MapViewModel: ObservableObject {
 
   @Published var position: MapCameraPosition
   @Published var displayItems: [DisplayPostItem]
-  let postItems: [Post] = Post.mockItems
+
+  let postItems: [Post] = Post.mockItemsKashiwa
 
   public init() {
     position = .userLocation(fallback: initialLocation)
@@ -102,8 +104,8 @@ public struct MapView: View {
           // サムネイルを表示
           Annotation("", coordinate: post.coordinate) {
             if let item = post.items.first {
-              // ThumbnailAnnotationView(imageURL: item.imageURL)
-              EmojiAnnotationView(emoji: item.iconString)
+              ThumbnailAnnotationView(imageURL: item.imageURL)
+              // EmojiAnnotationView(emoji: item.iconString)
             } else {
               Text("")
             }
