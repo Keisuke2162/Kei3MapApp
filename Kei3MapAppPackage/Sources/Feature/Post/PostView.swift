@@ -18,6 +18,7 @@ public class PostViewModel: ObservableObject {
   @Published var isLoading: Bool = false
   @Published var isSuccessPost: Bool = false
   @Published var photoLocation: CLLocationCoordinate2D?
+  @Published var addressString: String = "addressString"
 
   public init() {
   }
@@ -31,37 +32,63 @@ public class PostViewModel: ObservableObject {
   
   // 写真のDataを取得
   func processPhoto() {
+    addressString = ""
     guard let postPhotoItem else { return }
     postPhotoItem.loadTransferable(type: Data.self) { result in
       switch result {
       case .success(let data):
         guard let data else { return }
-        
-      case .failure(let failure):
+        guard let location = self.extractLocation(data: data) else {
+          return
+        }
+        Task { @MainActor in
+          self.photoLocation = location
+          self.addressString = await self.getAddress(coordinate: location)
+        }
+      case .failure:
         // 読み込みに失敗
         return
       }
     }
   }
 
-  func extractLocation(data: Data) {
+  nonisolated private func extractLocation(data: Data) -> CLLocationCoordinate2D? {
     // CGImageSource作成
-    guard let imageSource = CGImageSourceCreateWithData(data as CFData, nil) else { return }
+    guard let imageSource = CGImageSourceCreateWithData(data as CFData, nil) else { return nil }
     // メタデータ取得
-    guard let metadata = CGImageSourceCopyPropertiesAtIndex(imageSource, 0, nil) as? [CFString: Any] else { return }
+    guard let metadata = CGImageSourceCopyPropertiesAtIndex(imageSource, 0, nil) as? [CFString: Any] else { return nil }
     // GPS情報を取得
     guard let gpsData = metadata[kCGImagePropertyGPSDictionary] as? [CFString: Any],
           let latitude = gpsData[kCGImagePropertyGPSLatitude] as? Double,
           let latitudeRef = gpsData[kCGImagePropertyGPSLatitudeRef] as? String,
           let longitude = gpsData[kCGImagePropertyGPSLongitude] as? Double,
           let longitudeRef = gpsData[kCGImagePropertyGPSLongitudeRef] as? String else {
-      photoLocation = nil
-      return
+      return nil
     }
     // 経度、緯度
     let photoLatitude = latitudeRef == "S" ? -latitude : latitude
     let photoLongitude = longitudeRef == "W" ? -longitude : longitude
-    photoLocation = CLLocationCoordinate2D(latitude: photoLatitude, longitude: photoLongitude)
+    return CLLocationCoordinate2D(latitude: photoLatitude, longitude: photoLongitude)
+  }
+
+  nonisolated private func getAddress(coordinate: CLLocationCoordinate2D) async -> String {
+    let geoCoder = CLGeocoder()
+    let location = CLLocation(latitude: coordinate.latitude, longitude: coordinate.longitude)
+
+    do {
+      let placemarks = try await geoCoder.reverseGeocodeLocation(location)
+      if let placemark = placemarks.first {
+        // ざっくり住所を作成
+        let country = placemark.country ?? ""
+        let administrativeArea = placemark.administrativeArea ?? ""
+        let locality = placemark.locality ?? ""
+        return "\(country) \(administrativeArea) \(locality)"
+      } else {
+        return "getPlacemarkError"
+      }
+    } catch {
+      return "reverseGeocodeLocationError"
+    }
   }
 }
 
@@ -132,6 +159,8 @@ public struct PostView: View {
           .padding(.trailing, 16)
         }
         .frame(height: 56)
+        
+        Text(viewModel.addressString)
         
         TextEditor(text: $viewModel.text)
           .padding(.horizontal, 16)
