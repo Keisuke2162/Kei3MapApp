@@ -40,14 +40,7 @@ jobs:
       - name: Upload to App Store Connect
         run: |
           xcrun notarytool submit Kei3MapApp.zip \
-            --apple-id ${{ secrets.APPLE_ID }} \
-            --password ${{ secrets.APP_SPECIFIC_PASSWORD }} \
-            --team-id D2B3JPR4TJ \
-            --wait || sleep 10 && xcrun notarytool submit Kei3MapApp.zip \
-            --apple-id ${{ secrets.APPLE_ID }} \
-            --password ${{ secrets.APP_SPECIFIC_PASSWORD }} \
-            --team-id D2B3JPR4TJ \
-            --key-id ${{ secrets.APPLE_API_KEY_ID }} \
-            --issuer ${{ secrets.APPLE_API_ISSUER_ID }} \
-            --wait
-            --verbose
+          --apple-id ${{ secrets.APPLE_ID }} \
+          --password ${{ secrets.APP_SPECIFIC_PASSWORD }} \
+          --team-id ${{ secrets.TEAM_ID }} \
+          --wait
