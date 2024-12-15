@@ -14,6 +14,7 @@ public class MapViewModel: ObservableObject {
 
   @Published var position: MapCameraPosition
   @Published var displayItems: [DisplayPostItem]
+  @Published var isShowPostView: Bool = false
 
   let postItems: [Post] = Post.mockItemsKashiwa
 
@@ -22,6 +23,17 @@ public class MapViewModel: ObservableObject {
     self.displayItems = postItems.map {
       .init(coordinate: .init(latitude: $0.latitude, longitude: $0.longitude), items: [$0])
     }
+  }
+
+  // 投稿するボタンタップ
+  func onTapPostButton() {
+    isShowPostView = true
+  }
+
+  // 投稿完了後
+  func onPosted() {
+    isShowPostView = false
+    // TODO: 投稿完了のSnackBar出す？
   }
 
   // ズームの変更があった場合にデータを更新
@@ -83,8 +95,6 @@ public class MapViewModel: ObservableObject {
   }
 }
 
-
-
 public struct MapView: View {
   @StateObject var viewModel: MapViewModel =  MapViewModel()
   @State private var locationManager: CLLocationManager = CLLocationManager()
@@ -93,37 +103,58 @@ public struct MapView: View {
   }
 
   public var body: some View {
-    Map(position: $viewModel.position) {
-      ForEach(viewModel.displayItems, id: \.id) { post in
-        if post.items.count > 1 {
-          // クラスタリング用のViewを表示
-          Annotation("", coordinate: post.coordinate) {
-            ClusterAnnotationView(count: post.items.count)
-          }
-        } else {
-          // サムネイルを表示
-          Annotation("", coordinate: post.coordinate) {
-            if let item = post.items.first {
-              ThumbnailAnnotationView(imageURL: item.imageURL)
-              // EmojiAnnotationView(emoji: item.iconString)
-            } else {
-              Text("")
+    
+    ZStack {
+      Map(position: $viewModel.position) {
+        ForEach(viewModel.displayItems, id: \.id) { post in
+          if post.items.count > 1 {
+            // クラスタリング用のViewを表示
+            Annotation("", coordinate: post.coordinate) {
+              ClusterAnnotationView(count: post.items.count)
+            }
+          } else {
+            // サムネイルを表示
+            Annotation("", coordinate: post.coordinate) {
+              if let item = post.items.first {
+                ThumbnailAnnotationView(imageURL: item.imageURL)
+                // EmojiAnnotationView(emoji: item.iconString)
+              } else {
+                Text("")
+              }
             }
           }
         }
       }
+      .mapStyle(.standard)
+      .onMapCameraChange {
+        // 再描画走るので一旦コメントアウト
+        // viewModel.updateZoomLevel($0.camera.distance)
+      }
+      .mapControls {
+        MapUserLocationButton()
+      }
+      .onAppear {
+        locationManager.requestWhenInUseAuthorization()
+      }
+      
+      HStack {
+        Spacer()
+        VStack {
+          Spacer()
+          Button {
+            viewModel.onTapPostButton()
+          } label: {
+            Image(systemName: "pencil.and.scribble")
+          }
+          .frame(width: 56, height: 56)
+          .background(Color.white)
+
+        }
+      }
     }
-    .mapStyle(.standard)
-    .onMapCameraChange {
-      // 再描画走るので一旦コメントアウト
-      // viewModel.updateZoomLevel($0.camera.distance)
-    }
-    .mapControls {
-      MapUserLocationButton()
-    }
-    .onAppear {
-      locationManager.requestWhenInUseAuthorization()
-    }
+    .fullScreenCover(isPresented: $viewModel.isShowPostView, content: {
+      PostView(onPosted: viewModel.onPosted)
+    })
   }
   
   
