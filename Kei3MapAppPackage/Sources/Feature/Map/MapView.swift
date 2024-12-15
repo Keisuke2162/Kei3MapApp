@@ -103,58 +103,65 @@ public struct MapView: View {
   }
 
   public var body: some View {
-    
-    ZStack {
-      Map(position: $viewModel.position) {
-        ForEach(viewModel.displayItems, id: \.id) { post in
-          if post.items.count > 1 {
-            // クラスタリング用のViewを表示
-            Annotation("", coordinate: post.coordinate) {
-              ClusterAnnotationView(count: post.items.count)
-            }
-          } else {
-            // サムネイルを表示
-            Annotation("", coordinate: post.coordinate) {
-              if let item = post.items.first {
-                ThumbnailAnnotationView(imageURL: item.imageURL)
-                // EmojiAnnotationView(emoji: item.iconString)
-              } else {
-                Text("")
+    NavigationStack {
+      ZStack {
+        Map(position: $viewModel.position) {
+          ForEach(viewModel.displayItems, id: \.id) { post in
+            if post.items.count > 1 {
+              // クラスタリング用のViewを表示
+              Annotation("", coordinate: post.coordinate) {
+                ClusterAnnotationView(count: post.items.count)
+              }
+            } else {
+              // サムネイルを表示
+              Annotation("", coordinate: post.coordinate) {
+                if let item = post.items.first {
+                  NavigationLink {
+                    PostDetailView(postItem: item)
+                  } label: {
+                    ThumbnailAnnotationView(imageURL: item.imageURL)
+                  }
+                  // EmojiAnnotationView(emoji: item.iconString)
+                } else {
+                  Text("")
+                }
               }
             }
           }
         }
-      }
-      .mapStyle(.standard)
-      .onMapCameraChange {
-        // 再描画走るので一旦コメントアウト
-        // viewModel.updateZoomLevel($0.camera.distance)
-      }
-      .mapControls {
-        MapUserLocationButton()
-      }
-      .onAppear {
-        locationManager.requestWhenInUseAuthorization()
-      }
-      
-      HStack {
-        Spacer()
-        VStack {
+        .mapStyle(.standard)
+        .onMapCameraChange {
+          // 再描画走るので一旦コメントアウト
+          // viewModel.updateZoomLevel($0.camera.distance)
+        }
+        .mapControls {
+          MapUserLocationButton()
+        }
+        .onAppear {
+          locationManager.requestWhenInUseAuthorization()
+        }
+        
+        HStack {
           Spacer()
-          Button {
-            viewModel.onTapPostButton()
-          } label: {
-            Image(systemName: "pencil.and.scribble")
-          }
-          .frame(width: 56, height: 56)
-          .background(Color.white)
+          VStack {
+            Spacer()
+            Button {
+              viewModel.onTapPostButton()
+            } label: {
+              Image(systemName: "pencil.and.scribble")
+            }
+            .frame(width: 56, height: 56)
+            .background(Color.white)
 
+          }
         }
       }
+      .fullScreenCover(isPresented: $viewModel.isShowPostView, content: {
+        PostView(onPosted: viewModel.onPosted)
+      })
     }
-    .fullScreenCover(isPresented: $viewModel.isShowPostView, content: {
-      PostView(onPosted: viewModel.onPosted)
-    })
+    .ignoresSafeArea()
+    .toolbar(.hidden, for: .navigationBar)
   }
   
   
