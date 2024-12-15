@@ -34,6 +34,9 @@ jobs:
         run: |
           xcodebuild -exportArchive -archivePath Kei3MapApp.xcarchive -exportOptionsPlist ExportOptions.plist -exportPath Kei3MapApp.ipa -allowProvisioningUpdates -authenticationKeyPath `pwd`/private_keys/AuthKey_${{ secrets.APPLE_API_ISSUER_ID }}.p8 -authenticationKeyID ${{ secrets.APPLE_API_KEY_ID }} -authenticationKeyIssuerID ${{ secrets.APPLE_API_ISSUER_ID }}
 
+      - name: Compress IPA file
+        run: zip -r Kei3MapApp.zip Kei3MapApp.ipa
+
       - name: Upload to App Store Connect
         run: |
           xcrun notarytool submit Kei3MapApp.ipa \
