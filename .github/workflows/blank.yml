@@ -43,4 +43,8 @@ jobs:
             --apple-id ${{ secrets.APPLE_ID }} \
             --password ${{ secrets.APP_SPECIFIC_PASSWORD }} \
             --team-id D2B3JPR4TJ \
+            --wait || sleep 10 && xcrun notarytool submit Kei3MapApp.zip \
+            --apple-id ${{ secrets.APPLE_ID }} \
+            --password ${{ secrets.APP_SPECIFIC_PASSWORD }} \
+            --team-id D2B3JPR4TJ \
             --wait
