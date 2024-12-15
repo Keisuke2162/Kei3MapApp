@@ -17,8 +17,8 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Archive
-        run: | 
-          xcodebuild archive -project Kei3MapApp.xcodeproj -scheme Kei3MapApp -archivePath Kei3MapApp.xcarchive -sdk iphoneos -configuration Release CODE_SIGNING_ALLOWED=YES -allowProvisioningUpdates
+        run: |
+          xcodebuild archive -project Kei3MapApp.xcodeproj -scheme Kei3MapApp -archivePath Kei3MapApp.xcarchive -sdk iphoneos -configuration Release CODE_SIGNING_ALLOWED=NO
 
       - name: Create ExportOptions.plist
         run: |
@@ -34,13 +34,6 @@ jobs:
         run: |
           xcodebuild -exportArchive -archivePath Kei3MapApp.xcarchive -exportOptionsPlist ExportOptions.plist -exportPath Kei3MapApp.ipa -allowProvisioningUpdates -authenticationKeyPath `pwd`/private_keys/AuthKey_${{ secrets.APPLE_API_ISSUER_ID }}.p8 -authenticationKeyID ${{ secrets.APPLE_API_KEY_ID }} -authenticationKeyIssuerID ${{ secrets.APPLE_API_ISSUER_ID }}
 
-      - name: Compress IPA file
-        run: zip -r Kei3MapApp.zip Kei3MapApp.ipa
-
       - name: Upload to App Store Connect
         run: |
-          xcrun notarytool submit Kei3MapApp.zip \
-          --apple-id ${{ secrets.APPLE_ID }} \
-          --password ${{ secrets.APP_SPECIFIC_PASSWORD }} \
-          --team-id ${{ secrets.TEAM_ID }} \
-          --wait
+          xcrun altool --upload-app -f Kei3MapApp.ipa/Kei3MapApp.ipa -t ios -u ${{ secrets.APPLE_ID }} -p ${{ secrets.APP_SPECIFIC_PASSWORD }} --type ios
