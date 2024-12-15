@@ -12,8 +12,10 @@ let package = Package(
     dependencies: [],
     targets: [
       .target(name: "Entity"),
+      .target(name: "Extensions"),
       .target(name: "Feature", dependencies: [
-        "Entity"
+        "Entity",
+        "Extensions"
       ]),
     ]
 )
