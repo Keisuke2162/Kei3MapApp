@@ -4,15 +4,19 @@ import MapKit
 import SwiftUI
 
 public class MapViewModel: ObservableObject {
-  @Published var cameraPosition: MapCameraPosition
+  let initialLocation: MapCameraPosition = .region(
+    .init(
+      center: CLLocationCoordinate2D(latitude: 36.2048, longitude: 138.2529),
+      span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)
+    )
+  )
+
+  @Published var position: MapCameraPosition
   @Published var displayItems: [DisplayPostItem]
   let postItems: [Post] = Post.mockItems
 
   public init() {
-    self.cameraPosition = .region(.init(
-      center: CLLocationCoordinate2D(latitude: 36.2048, longitude: 138.2529),
-      span: MKCoordinateSpan(latitudeDelta: 10, longitudeDelta: 10)
-    ))
+    position = .userLocation(fallback: initialLocation)
     self.displayItems = postItems.map {
       .init(coordinate: .init(latitude: $0.latitude, longitude: $0.longitude), items: [$0])
     }
@@ -81,12 +85,13 @@ public class MapViewModel: ObservableObject {
 
 public struct MapView: View {
   @StateObject var viewModel: MapViewModel =  MapViewModel()
+  @State private var locationManager: CLLocationManager = CLLocationManager()
 
   public init() {
   }
 
   public var body: some View {
-    Map(position: $viewModel.cameraPosition) {
+    Map(position: $viewModel.position) {
       ForEach(viewModel.displayItems, id: \.id) { post in
         if post.items.count > 1 {
           // クラスタリング用のViewを表示
@@ -108,9 +113,17 @@ public struct MapView: View {
     }
     .mapStyle(.standard)
     .onMapCameraChange {
-      viewModel.updateZoomLevel($0.camera.distance)
+      // 再描画走るので一旦コメントアウト
+      // viewModel.updateZoomLevel($0.camera.distance)
+    }
+    .mapControls {
+      MapUserLocationButton()
+    }
+    .onAppear {
+      locationManager.requestWhenInUseAuthorization()
     }
   }
+  
   
   // クラスタリング用のAnnotationView
   struct ClusterAnnotationView: View {
