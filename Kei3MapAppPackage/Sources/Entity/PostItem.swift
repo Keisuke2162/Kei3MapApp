@@ -25,6 +25,15 @@ public struct Post: Identifiable {
     .init(postText: "沖縄美ら海水族館", latitude: 26.6944, longitude: 127.8784, iconString: "🦈"),
     .init(postText: "札幌時計台", latitude: 43.0621, longitude: 141.3544, iconString: "🕰️"),
   ]
+
+  public static let mockItemsKashiwa: [Post] = [
+    .init(postText: "モラージュ柏", latitude: 35.8833642, longitude: 139.9671091, iconString: ""),
+    .init(postText: "セブンイレブン", latitude: 35.8830425, longitude: 139.9673129, iconString: ""),
+    .init(postText: "事務キチ", latitude: 35.8830425, longitude: 139.9673129, iconString: ""),
+    .init(postText: "マナル", latitude: 35.8812692, longitude: 139.9673344, iconString: ""),
+    .init(postText: "公園", latitude: 35.8812692, longitude: 139.9673344, iconString: ""),
+    .init(postText: "路上", latitude: 35.8832077, longitude: 139.9701456, iconString: ""),
+  ]
 }
 
 public struct DisplayPostItem: Identifiable {

@@ -34,9 +34,22 @@
 		67E8DC1C2D0504960001D065 /* Kei3MapAppPackage */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Kei3MapAppPackage; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		679C29262D0E7AC1007BB197 /* Exceptions for "Kei3MapApp" folder in "Kei3MapApp" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 67E8DBDB2D05036A0001D065 /* Kei3MapApp */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		67E8DBDE2D05036A0001D065 /* Kei3MapApp */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				679C29262D0E7AC1007BB197 /* Exceptions for "Kei3MapApp" folder in "Kei3MapApp" target */,
+			);
 			path = Kei3MapApp;
 			sourceTree = "<group>";
 		};
@@ -409,6 +422,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
@@ -417,6 +431,9 @@
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = D2B3JPR4TJ;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Kei3MapApp/Info.plist;
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "ナビゲーション機能のため、バックグラウンドでも位置情報を使用します";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "マップ機能のために現在地情報を使用します";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -442,6 +459,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
@@ -450,6 +468,9 @@
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = D2B3JPR4TJ;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Kei3MapApp/Info.plist;
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "ナビゲーション機能のため、バックグラウンドでも位置情報を使用します";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "マップ機能のために現在地情報を使用します";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
