@@ -13,7 +13,8 @@ import SwiftData
 struct Kei3MapAppApp: App {
   var body: some Scene {
     WindowGroup {
-      MapView().padding()
+       MapView().padding()
+//      SigninView().padding()
     }
   }
 }
