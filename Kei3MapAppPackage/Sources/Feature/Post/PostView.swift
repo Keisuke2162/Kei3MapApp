@@ -9,6 +9,7 @@ public class PostViewModel: ObservableObject {
   @Published var postPhotoItem: PhotosPickerItem? {
     didSet {
       setPostUIImage()
+      processPhoto()
     }
   }
   @Published var postImage: UIImage?
@@ -16,6 +17,7 @@ public class PostViewModel: ObservableObject {
   @Published var errorMessage: String = ""
   @Published var isLoading: Bool = false
   @Published var isSuccessPost: Bool = false
+  @Published var photoLocation: CLLocationCoordinate2D?
 
   public init() {
   }
@@ -26,8 +28,42 @@ public class PostViewModel: ObservableObject {
       postImage = await postPhotoItem?.toUIImage()
     }
   }
-}
+  
+  // 写真のDataを取得
+  func processPhoto() {
+    guard let postPhotoItem else { return }
+    postPhotoItem.loadTransferable(type: Data.self) { result in
+      switch result {
+      case .success(let data):
+        guard let data else { return }
+        
+      case .failure(let failure):
+        // 読み込みに失敗
+        return
+      }
+    }
+  }
 
+  func extractLocation(data: Data) {
+    // CGImageSource作成
+    guard let imageSource = CGImageSourceCreateWithData(data as CFData, nil) else { return }
+    // メタデータ取得
+    guard let metadata = CGImageSourceCopyPropertiesAtIndex(imageSource, 0, nil) as? [CFString: Any] else { return }
+    // GPS情報を取得
+    guard let gpsData = metadata[kCGImagePropertyGPSDictionary] as? [CFString: Any],
+          let latitude = gpsData[kCGImagePropertyGPSLatitude] as? Double,
+          let latitudeRef = gpsData[kCGImagePropertyGPSLatitudeRef] as? String,
+          let longitude = gpsData[kCGImagePropertyGPSLongitude] as? Double,
+          let longitudeRef = gpsData[kCGImagePropertyGPSLongitudeRef] as? String else {
+      photoLocation = nil
+      return
+    }
+    // 経度、緯度
+    let photoLatitude = latitudeRef == "S" ? -latitude : latitude
+    let photoLongitude = longitudeRef == "W" ? -longitude : longitude
+    photoLocation = CLLocationCoordinate2D(latitude: photoLatitude, longitude: photoLongitude)
+  }
+}
 
 public struct PostView: View {
   @StateObject private var viewModel: PostViewModel = PostViewModel()
