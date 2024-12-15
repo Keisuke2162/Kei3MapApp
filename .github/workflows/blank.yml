@@ -48,6 +48,6 @@ jobs:
             --password ${{ secrets.APP_SPECIFIC_PASSWORD }} \
             --team-id D2B3JPR4TJ \
             --key-id ${{ secrets.APPLE_API_KEY_ID }} \
-            --issuer-id ${{ secrets.APPLE_API_ISSUER_ID }} \
+            --issuer ${{ secrets.APPLE_API_ISSUER_ID }} \
             --wait
             --verbose
