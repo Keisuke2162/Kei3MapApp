@@ -36,7 +36,7 @@ jobs:
 
       - name: Upload to App Store Connect
         run: |
-          xcrun notarytool submit Kei3MapApp.ipa/Kei3MapApp.ipa \
+          xcrun notarytool submit Kei3MapApp.ipa \
             --apple-id ${{ secrets.APPLE_ID }} \
             --password ${{ secrets.APP_SPECIFIC_PASSWORD }} \
             --team-id D2B3JPR4TJ \
