@@ -2,8 +2,10 @@ import SwiftUI
 
 public struct SetAccountNameView: View {
   @State private var accountName: String = ""
+  let onCreated: () -> Void
 
-  public init() {
+  public init(onCreated: @escaping () -> Void) {
+    self.onCreated = onCreated
   }
 
   public var body: some View {
@@ -16,7 +18,7 @@ public struct SetAccountNameView: View {
         .textFieldStyle(RoundedBorderTextFieldStyle())
       
       NavigationLink {
-        let viewModel = SetAccountThumbnailViewModel(accountName: accountName)
+        let viewModel = SetAccountThumbnailViewModel(accountName: accountName, onCreated: onCreated)
         SetAccountThumbnailView(viewModel: viewModel)
       } label: {
         Text("Next")

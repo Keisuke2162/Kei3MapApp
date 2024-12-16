@@ -4,6 +4,7 @@ import _PhotosUI_SwiftUI
 @MainActor
 public class SetAccountThumbnailViewModel: ObservableObject {
   let accountName: String
+  let onCreated: () -> Void
 
   @Published var photoItem: PhotosPickerItem? {
     didSet {
@@ -13,8 +14,9 @@ public class SetAccountThumbnailViewModel: ObservableObject {
   @Published var profileImage: UIImage?
   @Published var isImagePickerPresented = false
 
-  public init(accountName: String) {
+  public init(accountName: String, onCreated: @escaping () -> Void) {
     self.accountName = accountName
+    self.onCreated = onCreated
   }
 
   // UIImageに変換
@@ -52,7 +54,7 @@ public struct SetAccountThumbnailView: View {
           }
         }
         NavigationLink {
-          let viewModel = ConfirmCreateAccountViewModel(accountName: viewModel.accountName, profileImage: viewModel.profileImage)
+          let viewModel = ConfirmCreateAccountViewModel(accountName: viewModel.accountName, profileImage: viewModel.profileImage, onCreated: viewModel.onCreated)
           ConfirmCreateAccountView(viewModel: viewModel)
         } label: {
           Text("Next")

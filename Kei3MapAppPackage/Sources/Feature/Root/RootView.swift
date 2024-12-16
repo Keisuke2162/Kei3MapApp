@@ -9,7 +9,7 @@ import FirebaseFirestore
 public class RootViewModel: ObservableObject {
 //  @Published var isLoading: Bool = false
 //  @Published var account: Account?
-//  @Published var isShowCreateAccountView: Bool = false
+  @Published var isShowCreateAccountView: Bool = false
   @Published var showPageType: PageType = .loading
   
   private let db = Firestore.firestore()
@@ -18,7 +18,6 @@ public class RootViewModel: ObservableObject {
     case loading
     case map(Account)
     case signin
-    case createAccount
   }
 
   public init() {
@@ -37,6 +36,10 @@ public class RootViewModel: ObservableObject {
   
   // アカウント作成完了後処理
   func onCreatedAccount() {
+    isShowCreateAccountView = false
+    Task {
+      await signin()
+    }
   }
 
   // サインイン処理
@@ -55,7 +58,7 @@ public class RootViewModel: ObservableObject {
       let document = try await docRef.getDocument()
       guard let data = document.data() else {
         // アカウント情報が取得できなければアカウント作成画面を表示
-        showPageType = .createAccount
+        isShowCreateAccountView = true
         return
       }
       let userName = data["name"] as? String ?? ""
@@ -66,7 +69,7 @@ public class RootViewModel: ObservableObject {
       showPageType = .map(account)
     } catch {
       // アカウント情報が取得できなければアカウント作成画面を表示
-      showPageType = .createAccount
+      isShowCreateAccountView = true
     }
   }
 }
@@ -86,14 +89,15 @@ public struct RootView: View {
         MapView()
       case .signin:
         SigninView(viewModel: SigninViewModel(onLoggedIn: viewModel.onSignedin))
-      case .createAccount:
-        NavigationStack {
-          SetAccountNameView()
-        }
       }
     }
     .task {
       await viewModel.onAppear()
+    }
+    .sheet(isPresented: $viewModel.isShowCreateAccountView) {
+      NavigationStack {
+        SetAccountNameView(onCreated: viewModel.onCreatedAccount)
+      }
     }
   }
 }
