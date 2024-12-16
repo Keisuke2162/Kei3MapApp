@@ -12,6 +12,7 @@ public class MapViewModel: ObservableObject {
       span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)
     )
   )
+  private let locationManager: CLLocationManager = CLLocationManager()
 
   @Published var position: MapCameraPosition
   @Published var displayItems: [DisplayPostItem]
@@ -25,6 +26,18 @@ public class MapViewModel: ObservableObject {
     position = .userLocation(fallback: initialLocation)
     self.displayItems = postItems.map {
       .init(coordinate: .init(latitude: $0.latitude, longitude: $0.longitude), items: [$0])
+    }
+  }
+
+  func onAppear() {
+    locationManager.requestWhenInUseAuthorization()
+    if let location = locationManager.location?.coordinate {
+      position = .userLocation(fallback: .region(
+        .init(
+          center: location,
+          span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)
+        )
+      ))
     }
   }
 
@@ -100,7 +113,6 @@ public class MapViewModel: ObservableObject {
 
 public struct MapView: View {
   @StateObject var viewModel: MapViewModel
-  @State private var locationManager: CLLocationManager = CLLocationManager()
 
   public init(viewModel: MapViewModel) {
     _viewModel = StateObject(wrappedValue: viewModel)
@@ -142,9 +154,8 @@ public struct MapView: View {
           MapUserLocationButton()
         }
         .onAppear {
-          locationManager.requestWhenInUseAuthorization()
+          viewModel.onAppear()
         }
-        
         HStack {
           Spacer()
           VStack {
@@ -156,7 +167,8 @@ public struct MapView: View {
             }
             .frame(width: 56, height: 56)
             .background(Color.white)
-
+            .clipShape(Circle())
+            .padding(16)
           }
         }
       }
