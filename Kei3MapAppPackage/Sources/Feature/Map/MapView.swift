@@ -16,9 +16,11 @@ public class MapViewModel: ObservableObject {
   @Published var displayItems: [DisplayPostItem]
   @Published var isShowPostView: Bool = false
 
+  let account: Account
   let postItems: [Post] = Post.mockItemsKashiwa
 
-  public init() {
+  public init(account: Account) {
+    self.account = account
     position = .userLocation(fallback: initialLocation)
     self.displayItems = postItems.map {
       .init(coordinate: .init(latitude: $0.latitude, longitude: $0.longitude), items: [$0])
@@ -96,10 +98,11 @@ public class MapViewModel: ObservableObject {
 }
 
 public struct MapView: View {
-  @StateObject var viewModel: MapViewModel =  MapViewModel()
+  @StateObject var viewModel: MapViewModel
   @State private var locationManager: CLLocationManager = CLLocationManager()
 
-  public init() {
+  public init(viewModel: MapViewModel) {
+    _viewModel = StateObject(wrappedValue: viewModel)
   }
 
   public var body: some View {
@@ -157,7 +160,8 @@ public struct MapView: View {
         }
       }
       .fullScreenCover(isPresented: $viewModel.isShowPostView, content: {
-        PostView(onPosted: viewModel.onPosted)
+        let viewModel = PostViewModel(account: viewModel.account, onPosted: viewModel.onPosted)
+        PostView(viewModel: viewModel)
       })
     }
     .ignoresSafeArea()

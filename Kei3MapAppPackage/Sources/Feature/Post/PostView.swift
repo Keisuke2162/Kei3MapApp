@@ -1,10 +1,14 @@
 import Extensions
+import FirebaseStorage
+import FirebaseFirestore
 import SwiftUI
 import _PhotosUI_SwiftUI
 
 @MainActor
 public class PostViewModel: ObservableObject {
-//  let user: SNSUser
+  public let account: Account
+  public let onPosted: () -> Void
+
   @Published var text: String = ""
   @Published var postPhotoItem: PhotosPickerItem? {
     didSet {
@@ -20,7 +24,9 @@ public class PostViewModel: ObservableObject {
   @Published var photoLocation: CLLocationCoordinate2D?
   @Published var addressString: String = "addressString"
 
-  public init() {
+  public init(account: Account, onPosted: @escaping () -> Void) {
+    self.account = account
+    self.onPosted = onPosted
   }
 
   // 写真をUIImageに変換
@@ -90,14 +96,62 @@ public class PostViewModel: ObservableObject {
       return "reverseGeocodeLocationError"
     }
   }
+
+  // 投稿処理
+  func post() async {
+    guard let postImage else { return }
+    isLoading = true
+    guard let uploadImageURL = await uploadImageToStrorage(uiImage: postImage) else { return }
+    saveUserDataToFireStore(imageURLString: uploadImageURL)
+    isLoading = false
+    onPosted()
+  }
+  
+  // 投稿画像をStorageにアップ（アップロード後のURLを返す）
+  private func uploadImageToStrorage(uiImage: UIImage) async -> String? {
+    let storageRef = Storage.storage().reference().child("post_images/\(UUID().uuidString).jpg")
+
+    guard let imageData = uiImage.jpegData(compressionQuality: 0.75) else {
+      errorMessage = "Failed to convert image to data"
+      return nil
+    }
+
+    do {
+      _ = try await storageRef.putDataAsync(imageData)
+      let imageURL = try await storageRef.downloadURL()
+      return imageURL.absoluteString
+    } catch {
+      errorMessage = "Failed to upload image or fetch URL: \(error.localizedDescription)"
+      return nil
+    }
+  }
+  
+  // 投稿データをFirestoreにアップ
+  private func saveUserDataToFireStore(imageURLString: String) {
+    let data: [String: Any] = [
+      "userID": account.userID,
+      "postText": text,
+      "postImageURL": imageURLString,
+      "createdAt": Date()
+    ]
+    // FireStoreのusersコレクション内にUIDでドキュメントを作る
+    let db = Firestore.firestore()
+    db.collection("posts").document(UUID().uuidString).setData(data) { error in
+      if let error {
+        self.errorMessage = "Failed post: \(error.localizedDescription)"
+      } else {
+        self.isSuccessPost = true
+      }
+    }
+  }
 }
 
 public struct PostView: View {
-  @StateObject private var viewModel: PostViewModel = PostViewModel()
-  public let onPosted: () -> Void
+  @StateObject private var viewModel: PostViewModel
+  @Environment(\.dismiss) var dismiss
 
-  public init(onPosted: @escaping () -> Void) {
-    self.onPosted = onPosted
+  public init(viewModel: PostViewModel) {
+    _viewModel = StateObject(wrappedValue: viewModel)
   }
 
   public var body: some View {
@@ -106,14 +160,15 @@ public struct PostView: View {
         HStack {
           Button {
             // TODO: onCanceledに変更
-            onPosted()
+            dismiss()
           } label: {
             Text("Cancel")
           }
           Spacer()
           Button {
-            // TODO: 投稿処理呼ぶ
-            onPosted()
+            Task {
+              await viewModel.post()
+            }
           } label: {
             Text("Post")
           }

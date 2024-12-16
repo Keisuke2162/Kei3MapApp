@@ -86,7 +86,8 @@ public struct RootView: View {
       case .loading:
         ProgressView()
       case .map(let account):
-        MapView()
+        let viewModel = MapViewModel(account: account)
+        MapView(viewModel: viewModel)
       case .signin:
         SigninView(viewModel: SigninViewModel(onLoggedIn: viewModel.onSignedin))
       }
