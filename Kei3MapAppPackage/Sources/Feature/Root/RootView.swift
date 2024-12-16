@@ -25,8 +25,7 @@ public class RootViewModel: ObservableObject {
   }
 
   func onAppear() async {
-    // await signin()
-    showPageType = .signin
+     await signin()
   }
 
   // サインイン完了後処理
@@ -88,7 +87,9 @@ public struct RootView: View {
       case .signin:
         SigninView(viewModel: SigninViewModel(onLoggedIn: viewModel.onSignedin))
       case .createAccount:
-        Text("Create Account View")
+        NavigationStack {
+          SetAccountNameView()
+        }
       }
     }
     .task {
