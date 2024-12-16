@@ -8,13 +8,24 @@
 import Feature
 import SwiftUI
 import SwiftData
+import FirebaseCore
 
-@main
-struct Kei3MapAppApp: App {
-  var body: some Scene {
-    WindowGroup {
-      MapView().padding()
-    }
+class AppDelegate: NSObject, UIApplicationDelegate {
+  func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
+    FirebaseApp.configure()
+    return true
   }
 }
 
+@main
+struct Kei3MapAppApp: App {
+  @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
+
+  var body: some Scene {
+    WindowGroup {
+//       MapView().padding()
+//      SigninView().padding()
+      RootView()
+    }
+  }
+}
