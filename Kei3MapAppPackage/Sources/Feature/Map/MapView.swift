@@ -5,9 +5,10 @@ import SwiftUI
 
 public class MapViewModel: ObservableObject {
   // 現在位置取得できない場合のデフォルトの位置情報
+  static let initialCoordinate2D = CLLocationCoordinate2D(latitude: 36.2048, longitude: 138.2529)
   let initialLocation: MapCameraPosition = .region(
     .init(
-      center: CLLocationCoordinate2D(latitude: 36.2048, longitude: 138.2529),
+      center: initialCoordinate2D,
       span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)
     )
   )
@@ -160,7 +161,8 @@ public struct MapView: View {
         }
       }
       .fullScreenCover(isPresented: $viewModel.isShowPostView, content: {
-        let viewModel = PostViewModel(account: viewModel.account, onPosted: viewModel.onPosted)
+        let location = viewModel.position.region?.center ?? MapViewModel.initialCoordinate2D
+        let viewModel = PostViewModel(account: viewModel.account, location: location, onPosted: viewModel.onPosted)
         PostView(viewModel: viewModel)
       })
     }

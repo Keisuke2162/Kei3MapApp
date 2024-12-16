@@ -8,6 +8,7 @@ import _PhotosUI_SwiftUI
 public class PostViewModel: ObservableObject {
   public let account: Account
   public let onPosted: () -> Void
+  public let location: CLLocationCoordinate2D // 現在位置（写真の位置情報がない場合に使う）
 
   @Published var text: String = ""
   @Published var postPhotoItem: PhotosPickerItem? {
@@ -24,8 +25,9 @@ public class PostViewModel: ObservableObject {
   @Published var photoLocation: CLLocationCoordinate2D?
   @Published var addressString: String = "addressString"
 
-  public init(account: Account, onPosted: @escaping () -> Void) {
+  public init(account: Account, location: CLLocationCoordinate2D, onPosted: @escaping () -> Void) {
     self.account = account
+    self.location = location
     self.onPosted = onPosted
   }
 
@@ -132,6 +134,8 @@ public class PostViewModel: ObservableObject {
       "userID": account.userID,
       "postText": text,
       "postImageURL": imageURLString,
+      "latitude": photoLocation?.latitude ?? location.latitude,
+      "longitude": photoLocation?.longitude ?? location.longitude,
       "createdAt": Date()
     ]
     // FireStoreのusersコレクション内にUIDでドキュメントを作る
