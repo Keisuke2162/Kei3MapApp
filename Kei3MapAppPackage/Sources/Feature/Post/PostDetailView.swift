@@ -1,5 +1,6 @@
 import Entity
 import SwiftUI
+import Kingfisher
 
 @MainActor
 public class PostDetailViewModel: ObservableObject {
@@ -22,12 +23,9 @@ public struct PostDetailView: View {
       RoundedRectangle(cornerRadius: 0)
         .aspectRatio(1, contentMode: .fit)
         .overlay {
-          AsyncImage(url: viewModel.postItem.imageURL) { image in
-            image
-              .resizable()
-              .scaledToFill()
-          } placeholder: {
-          }
+          KFImage(viewModel.postItem.postImageURL)
+            .resizable()
+            .scaledToFill()
         }
         .clipShape(RoundedRectangle(cornerRadius: 4))
         .padding(.top, 16)

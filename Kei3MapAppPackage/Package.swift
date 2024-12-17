@@ -11,7 +11,8 @@ let package = Package(
     ],
     dependencies: [
       .package(url: "https://github.com/firebase/firebase-ios-sdk", exact: "11.6.0"),
-      .package(url: "https://github.com/google/GoogleSignIn-iOS", exact: "8.0.0")
+      .package(url: "https://github.com/google/GoogleSignIn-iOS", exact: "8.0.0"),
+      .package(url: "https://github.com/onevcat/Kingfisher.git", exact: "8.1.2"),
     ],
     targets: [
       .target(name: "Entity"),
@@ -22,7 +23,8 @@ let package = Package(
         .product(name: "FirebaseAuth", package: "firebase-ios-sdk"),
         .product(name: "FirebaseFirestore", package: "firebase-ios-sdk"),
         .product(name: "FirebaseStorage", package: "firebase-ios-sdk"),
-        .product(name: "GoogleSignIn", package: "GoogleSignIn-iOS")
+        .product(name: "GoogleSignIn", package: "GoogleSignIn-iOS"),
+        .product(name: "Kingfisher", package: "Kingfisher")
       ]),
     ]
 )

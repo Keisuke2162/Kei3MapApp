@@ -2,26 +2,69 @@ import Entity
 import Extensions
 import MapKit
 import SwiftUI
+import FirebaseFirestore
+import Kingfisher
 
 public class MapViewModel: ObservableObject {
   // 現在位置取得できない場合のデフォルトの位置情報
+  static let initialCoordinate2D = CLLocationCoordinate2D(latitude: 36.2048, longitude: 138.2529)
   let initialLocation: MapCameraPosition = .region(
     .init(
-      center: CLLocationCoordinate2D(latitude: 36.2048, longitude: 138.2529),
+      center: initialCoordinate2D,
       span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)
     )
   )
+  private let locationManager: CLLocationManager = CLLocationManager()
 
   @Published var position: MapCameraPosition
-  @Published var displayItems: [DisplayPostItem]
+  @Published var displayItems: [DisplayPostItem] = []
   @Published var isShowPostView: Bool = false
 
-  let postItems: [Post] = Post.mockItemsKashiwa
+  let account: Account
+  var postItems: [Post] = []
 
-  public init() {
-    position = .userLocation(fallback: initialLocation)
-    self.displayItems = postItems.map {
-      .init(coordinate: .init(latitude: $0.latitude, longitude: $0.longitude), items: [$0])
+  public init(account: Account) {
+    self.account = account
+    position = .userLocation(fallback: .automatic)
+  }
+
+  func onAppear() {
+    locationManager.requestWhenInUseAuthorization()
+//    if let location = locationManager.location?.coordinate {
+//      position = .userLocation(fallback: .region(
+//        .init(
+//          center: location,
+//          span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)
+//        )
+//      ))
+//    }
+    
+    // 投稿一覧取得
+    Task { @MainActor in
+      let posts = await fetchPost()
+      postItems = posts
+      self.displayItems = posts.map {
+        .init(coordinate: .init(latitude: $0.latitude, longitude: $0.longitude), items: [$0])
+      }
+    }
+  }
+  
+  // 投稿一覧取得
+  // TODO: いずれ直近24時間以内とかにしたい
+  private func fetchPost() async -> [Post] {
+    do {
+      let querySnapshot = try await Firestore.firestore()
+        .collection("posts")
+        .order(by: "createdAt", descending: true)
+        .limit(to: 20)
+        .getDocuments()
+      let postData = querySnapshot.documents.compactMap { document in
+        try? document.data(as: Post.self)
+      }
+      return postData
+    } catch {
+      // "Failed fetch timeline data \(error.localizedDescription)"
+      return []
     }
   }
 
@@ -96,17 +139,17 @@ public class MapViewModel: ObservableObject {
 }
 
 public struct MapView: View {
-  @StateObject var viewModel: MapViewModel =  MapViewModel()
-  @State private var locationManager: CLLocationManager = CLLocationManager()
+  @StateObject var viewModel: MapViewModel
 
-  public init() {
+  public init(viewModel: MapViewModel) {
+    _viewModel = StateObject(wrappedValue: viewModel)
   }
 
   public var body: some View {
     NavigationStack {
       ZStack {
-        Map(position: $viewModel.position) {
-          ForEach(viewModel.displayItems, id: \.id) { post in
+        Map(position: $viewModel.position, interactionModes: .all) {
+          ForEach(viewModel.displayItems) { post in
             if post.items.count > 1 {
               // クラスタリング用のViewを表示
               Annotation("", coordinate: post.coordinate) {
@@ -119,9 +162,8 @@ public struct MapView: View {
                   NavigationLink {
                     PostDetailView(postItem: item)
                   } label: {
-                    ThumbnailAnnotationView(imageURL: item.imageURL)
+                    ThumbnailAnnotationView(imageURL: item.postImageURL)
                   }
-                  // EmojiAnnotationView(emoji: item.iconString)
                 } else {
                   Text("")
                 }
@@ -138,9 +180,8 @@ public struct MapView: View {
           MapUserLocationButton()
         }
         .onAppear {
-          locationManager.requestWhenInUseAuthorization()
+          viewModel.onAppear()
         }
-        
         HStack {
           Spacer()
           VStack {
@@ -152,12 +193,15 @@ public struct MapView: View {
             }
             .frame(width: 56, height: 56)
             .background(Color.white)
-
+            .clipShape(Circle())
+            .padding(16)
           }
         }
       }
       .fullScreenCover(isPresented: $viewModel.isShowPostView, content: {
-        PostView(onPosted: viewModel.onPosted)
+        let location = viewModel.position.region?.center ?? MapViewModel.initialCoordinate2D
+        let viewModel = PostViewModel(account: viewModel.account, location: location, onPosted: viewModel.onPosted)
+        PostView(viewModel: viewModel)
       })
     }
     .ignoresSafeArea()
@@ -185,35 +229,16 @@ public struct MapView: View {
       let imageURL: URL
       
       var body: some View {
-          AsyncImage(url: imageURL) { image in
-              image.resizable()
-                  .scaledToFill()
-                  .frame(width: 50, height: 50)
-                  .clipShape(Circle())
-                  .overlay(
-                      Circle().stroke(Color.white, lineWidth: 2)
-                          .shadow(radius: 4)
-                  )
-          } placeholder: {
-              ProgressView()
-          }
+        KFImage(imageURL)
+            .resizable()
+            .scaledToFill()
+            .frame(width: 50, height: 50)
+            .clipShape(Circle())
+            .overlay(
+                Circle().stroke(Color.white, lineWidth: 2)
+                    .shadow(radius: 4)
+            )
       }
-  }
-  
-  //
-  struct EmojiAnnotationView: View {
-    let emoji: String
-
-    var body: some View {
-      ZStack {
-        Circle()
-          .fill(Color.white.opacity(0.8))
-          .frame(width: 48, height: 48)
-        Text(emoji)
-              .foregroundColor(.white)
-              .fontWeight(.bold)
-      }
-    }
   }
 }
 
