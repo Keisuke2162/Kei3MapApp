@@ -22,7 +22,7 @@ public struct PostDetailView: View {
       RoundedRectangle(cornerRadius: 0)
         .aspectRatio(1, contentMode: .fit)
         .overlay {
-          AsyncImage(url: viewModel.postItem.imageURL) { image in
+          AsyncImage(url: viewModel.postItem.postImageURL) { image in
             image
               .resizable()
               .scaledToFill()

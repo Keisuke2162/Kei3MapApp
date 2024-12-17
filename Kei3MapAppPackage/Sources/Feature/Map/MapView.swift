@@ -2,6 +2,7 @@ import Entity
 import Extensions
 import MapKit
 import SwiftUI
+import FirebaseFirestore
 
 public class MapViewModel: ObservableObject {
   // 現在位置取得できない場合のデフォルトの位置情報
@@ -15,18 +16,15 @@ public class MapViewModel: ObservableObject {
   private let locationManager: CLLocationManager = CLLocationManager()
 
   @Published var position: MapCameraPosition
-  @Published var displayItems: [DisplayPostItem]
+  @Published var displayItems: [DisplayPostItem] = []
   @Published var isShowPostView: Bool = false
 
   let account: Account
-  let postItems: [Post] = Post.mockItemsKashiwa
+  var postItems: [Post] = []
 
   public init(account: Account) {
     self.account = account
     position = .userLocation(fallback: initialLocation)
-    self.displayItems = postItems.map {
-      .init(coordinate: .init(latitude: $0.latitude, longitude: $0.longitude), items: [$0])
-    }
   }
 
   func onAppear() {
@@ -38,6 +36,34 @@ public class MapViewModel: ObservableObject {
           span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)
         )
       ))
+    }
+    
+    // 投稿一覧取得
+    Task { @MainActor in
+      let posts = await fetchPost()
+      postItems = posts
+      self.displayItems = posts.map {
+        .init(coordinate: .init(latitude: $0.latitude, longitude: $0.longitude), items: [$0])
+      }
+    }
+  }
+  
+  // 投稿一覧取得
+  // TODO: いずれ直近24時間以内とかにしたい
+  private func fetchPost() async -> [Post] {
+    do {
+      let querySnapshot = try await Firestore.firestore()
+        .collection("posts")
+        .order(by: "createdAt", descending: true)
+        .limit(to: 20)
+        .getDocuments()
+      let postData = querySnapshot.documents.compactMap { document in
+        try? document.data(as: Post.self)
+      }
+      return postData
+    } catch {
+      // "Failed fetch timeline data \(error.localizedDescription)"
+      return []
     }
   }
 
@@ -122,7 +148,7 @@ public struct MapView: View {
     NavigationStack {
       ZStack {
         Map(position: $viewModel.position) {
-          ForEach(viewModel.displayItems, id: \.id) { post in
+          ForEach(viewModel.displayItems) { post in
             if post.items.count > 1 {
               // クラスタリング用のViewを表示
               Annotation("", coordinate: post.coordinate) {
@@ -135,9 +161,8 @@ public struct MapView: View {
                   NavigationLink {
                     PostDetailView(postItem: item)
                   } label: {
-                    ThumbnailAnnotationView(imageURL: item.imageURL)
+                    ThumbnailAnnotationView(imageURL: item.postImageURL)
                   }
-                  // EmojiAnnotationView(emoji: item.iconString)
                 } else {
                   Text("")
                 }
@@ -216,22 +241,6 @@ public struct MapView: View {
               ProgressView()
           }
       }
-  }
-  
-  //
-  struct EmojiAnnotationView: View {
-    let emoji: String
-
-    var body: some View {
-      ZStack {
-        Circle()
-          .fill(Color.white.opacity(0.8))
-          .frame(width: 48, height: 48)
-        Text(emoji)
-              .foregroundColor(.white)
-              .fontWeight(.bold)
-      }
-    }
   }
 }
 

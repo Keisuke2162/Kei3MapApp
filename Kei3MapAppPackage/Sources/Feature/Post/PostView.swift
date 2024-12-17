@@ -136,6 +136,7 @@ public class PostViewModel: ObservableObject {
       "postImageURL": imageURLString,
       "latitude": photoLocation?.latitude ?? location.latitude,
       "longitude": photoLocation?.longitude ?? location.longitude,
+      "addressString": addressString,
       "createdAt": Date()
     ]
     // FireStoreのusersコレクション内にUIDでドキュメントを作る
