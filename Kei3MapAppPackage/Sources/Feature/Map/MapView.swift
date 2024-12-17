@@ -3,6 +3,7 @@ import Extensions
 import MapKit
 import SwiftUI
 import FirebaseFirestore
+import Kingfisher
 
 public class MapViewModel: ObservableObject {
   // 現在位置取得できない場合のデフォルトの位置情報
@@ -24,19 +25,19 @@ public class MapViewModel: ObservableObject {
 
   public init(account: Account) {
     self.account = account
-    position = .userLocation(fallback: initialLocation)
+    position = .userLocation(fallback: .automatic)
   }
 
   func onAppear() {
     locationManager.requestWhenInUseAuthorization()
-    if let location = locationManager.location?.coordinate {
-      position = .userLocation(fallback: .region(
-        .init(
-          center: location,
-          span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)
-        )
-      ))
-    }
+//    if let location = locationManager.location?.coordinate {
+//      position = .userLocation(fallback: .region(
+//        .init(
+//          center: location,
+//          span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)
+//        )
+//      ))
+//    }
     
     // 投稿一覧取得
     Task { @MainActor in
@@ -147,7 +148,7 @@ public struct MapView: View {
   public var body: some View {
     NavigationStack {
       ZStack {
-        Map(position: $viewModel.position) {
+        Map(position: $viewModel.position, interactionModes: .all) {
           ForEach(viewModel.displayItems) { post in
             if post.items.count > 1 {
               // クラスタリング用のViewを表示
@@ -228,18 +229,15 @@ public struct MapView: View {
       let imageURL: URL
       
       var body: some View {
-          AsyncImage(url: imageURL) { image in
-              image.resizable()
-                  .scaledToFill()
-                  .frame(width: 50, height: 50)
-                  .clipShape(Circle())
-                  .overlay(
-                      Circle().stroke(Color.white, lineWidth: 2)
-                          .shadow(radius: 4)
-                  )
-          } placeholder: {
-              ProgressView()
-          }
+        KFImage(imageURL)
+            .resizable()
+            .scaledToFill()
+            .frame(width: 50, height: 50)
+            .clipShape(Circle())
+            .overlay(
+                Circle().stroke(Color.white, lineWidth: 2)
+                    .shadow(radius: 4)
+            )
       }
   }
 }
