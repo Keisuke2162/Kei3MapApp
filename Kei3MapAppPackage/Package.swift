@@ -20,11 +20,20 @@ let package = Package(
       .target(name: "Feature", dependencies: [
         "Entity",
         "Extensions",
+        "Repository",
         .product(name: "FirebaseAuth", package: "firebase-ios-sdk"),
         .product(name: "FirebaseFirestore", package: "firebase-ios-sdk"),
         .product(name: "FirebaseStorage", package: "firebase-ios-sdk"),
         .product(name: "GoogleSignIn", package: "GoogleSignIn-iOS"),
         .product(name: "Kingfisher", package: "Kingfisher")
+      ]),
+      .target(name: "Repository", dependencies: [
+        "Entity",
+        "Extensions",
+        .product(name: "FirebaseAuth", package: "firebase-ios-sdk"),
+        .product(name: "FirebaseFirestore", package: "firebase-ios-sdk"),
+        .product(name: "FirebaseStorage", package: "firebase-ios-sdk"),
+        .product(name: "GoogleSignIn", package: "GoogleSignIn-iOS"),
       ]),
     ]
 )
