@@ -1,3 +1,4 @@
+import Entity
 import Extensions
 import SwiftUI
 import _PhotosUI_SwiftUI

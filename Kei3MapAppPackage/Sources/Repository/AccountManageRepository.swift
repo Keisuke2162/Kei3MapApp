@@ -2,7 +2,7 @@ import FirebaseAuth
 import FirebaseStorage
 import FirebaseFirestore
 
-protocol AccountManageRepositoryProtocol: AnyObject {
+public protocol AccountManageRepositoryProtocol: AnyObject {
   func uploadProfileImage(image: UIImage) async throws -> URL
   func updateAccountData(name: String, imageURL: URL) async throws
 }
@@ -14,7 +14,10 @@ public enum AccountError: Error {
 }
 
 public class AccountManageRepository: AccountManageRepositoryProtocol {
-  func uploadProfileImage(image: UIImage) async throws -> URL {
+  public init() {
+  }
+
+  public func uploadProfileImage(image: UIImage) async throws -> URL {
     // Storageのパスを設定
     let storageRef = Storage.storage().reference().child("profile_images/\(UUID().uuidString).jpg")
     
@@ -30,7 +33,7 @@ public class AccountManageRepository: AccountManageRepositoryProtocol {
     return imageURL
   }
 
-  func updateAccountData(name: String, imageURL: URL) async throws {
+  public func updateAccountData(name: String, imageURL: URL) async throws {
     guard let currentUser = Auth.auth().currentUser else {
       throw AccountError.failedGetCurrentAccount
     }

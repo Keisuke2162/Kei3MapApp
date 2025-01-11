@@ -1,3 +1,4 @@
+import Entity
 import Extensions
 import FirebaseStorage
 import FirebaseFirestore

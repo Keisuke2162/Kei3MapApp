@@ -2,9 +2,11 @@ import SwiftUI
 import FirebaseAuth
 import FirebaseStorage
 import FirebaseFirestore
+import Repository
 
 @MainActor
 public class ConfirmCreateAccountViewModel: ObservableObject {
+  let accountManageRepository: AccountManageRepositoryProtocol
   let accountName: String
   let profileImage: UIImage?
   let onCreated: () -> Void
@@ -13,10 +15,15 @@ public class ConfirmCreateAccountViewModel: ObservableObject {
   @Published var isShowError: Bool = false
 
   // TODO: onCreatedのバケツリレーどうにかしたい
-  public init(accountName: String, profileImage: UIImage?, onCreated: @escaping () -> Void) {
-    self.accountName = accountName
-    self.profileImage = profileImage
-    self.onCreated = onCreated
+  public init(
+    accountName: String,
+    profileImage: UIImage?,
+    accountManageRepository: AccountManageRepositoryProtocol,
+    onCreated: @escaping () -> Void) {
+      self.accountName = accountName
+      self.profileImage = profileImage
+      self.accountManageRepository = accountManageRepository
+      self.onCreated = onCreated
   }
 
   // この辺はAccountManagerとかにまるっと移せるのでは？
@@ -24,62 +31,14 @@ public class ConfirmCreateAccountViewModel: ObservableObject {
     isShowError = false
     guard let profileImage else { return }
     isLoading = true
-    guard let uploadImageURL = await uploadImageToStrorage(uiImage: profileImage) else {
-      isLoading = false
-      return
-    }
-    saveUserDataToFireStore(name: accountName, profileImageURLString: uploadImageURL)
-    isLoading = false
-  }
-  
-  // プロフィール画像のアップロード（アップロード後のURLを返す）
-  private func uploadImageToStrorage(uiImage: UIImage) async -> String? {
-    // Storageのパスを設定
-    let storageRef = Storage.storage().reference().child("profile_images/\(UUID().uuidString).jpg")
-    
-    // 画像をデータに変換
-    guard let imageData = uiImage.jpegData(compressionQuality: 0.75) else {
-      // Failed to convert image to data
-      isShowError = true
-      return nil
-    }
-
     do {
-      // 画像データをアップロード
-      _ = try await storageRef.putDataAsync(imageData)
-      // アップロードした画像のURLを取得
-      let imageURL = try await storageRef.downloadURL()
-      return imageURL.absoluteString
+      let url = try await accountManageRepository.uploadProfileImage(image: profileImage)
+      try await accountManageRepository.updateAccountData(name: accountName, imageURL: url)
+      isLoading = false
+      self.onCreated()
     } catch {
-      // "Failed to upload image or fetch URL: \(error.localizedDescription)"
+      isLoading = false
       isShowError = true
-      return nil
-    }
-  }
-
-  // FireStoreにアカウントデータを保存する
-  private func saveUserDataToFireStore(name: String, profileImageURLString: String) {
-    guard let currentUser = Auth.auth().currentUser else {
-      // "Failed to get currentUser"
-      isShowError = true
-      return
-    }
-  
-    // FireStoreのusersコレクション内にUIDでドキュメントを作る
-    let db = Firestore.firestore()
-    let userRef = db.collection("users").document(currentUser.uid)
-
-    userRef.setData([
-      "name": name,
-      "thumbnailURL": profileImageURLString
-    ]) { error in
-      if error != nil {
-        // "Error saving user data: \(error.localizedDescription)"
-        self.isShowError = true
-      } else {
-        // アカウント登録完了
-        self.onCreated()
-      }
     }
   }
 }

@@ -1,4 +1,5 @@
 import SwiftUI
+import Repository
 import _PhotosUI_SwiftUI
 
 @MainActor
@@ -54,7 +55,11 @@ public struct SetAccountThumbnailView: View {
           }
         }
         NavigationLink {
-          let viewModel = ConfirmCreateAccountViewModel(accountName: viewModel.accountName, profileImage: viewModel.profileImage, onCreated: viewModel.onCreated)
+          let viewModel = ConfirmCreateAccountViewModel(
+            accountName: viewModel.accountName,
+            profileImage: viewModel.profileImage,
+            accountManageRepository: AccountManageRepository(),
+            onCreated: viewModel.onCreated)
           ConfirmCreateAccountView(viewModel: viewModel)
         } label: {
           Text("Next")
