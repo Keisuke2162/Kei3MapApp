@@ -1,7 +1,9 @@
 import Entity
 import Extensions
 import MapKit
+import Services
 import SwiftUI
+import Repository
 import FirebaseFirestore
 import Kingfisher
 
@@ -26,6 +28,15 @@ public class MapViewModel: ObservableObject {
   public init(account: Account) {
     self.account = account
     position = .userLocation(fallback: .automatic)
+  }
+  
+  // TODO: 別ファイルにcreate系まとめたい
+  @MainActor
+  func createPostViewModel() -> PostViewModel {
+    return .init(
+      account: account,
+      location: position.region?.center ?? MapViewModel.initialCoordinate2D,
+      onPosted: onPosted)
   }
 
   func onAppear() {
@@ -199,8 +210,7 @@ public struct MapView: View {
         }
       }
       .fullScreenCover(isPresented: $viewModel.isShowPostView, content: {
-        let location = viewModel.position.region?.center ?? MapViewModel.initialCoordinate2D
-        let viewModel = PostViewModel(account: viewModel.account, location: location, onPosted: viewModel.onPosted)
+        let viewModel = viewModel.createPostViewModel()
         PostView(viewModel: viewModel)
       })
     }

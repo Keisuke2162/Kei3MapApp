@@ -21,6 +21,7 @@ let package = Package(
         "Entity",
         "Extensions",
         "Repository",
+        "Services",
         .product(name: "FirebaseAuth", package: "firebase-ios-sdk"),
         .product(name: "FirebaseFirestore", package: "firebase-ios-sdk"),
         .product(name: "FirebaseStorage", package: "firebase-ios-sdk"),
@@ -35,5 +36,6 @@ let package = Package(
         .product(name: "FirebaseStorage", package: "firebase-ios-sdk"),
         .product(name: "GoogleSignIn", package: "GoogleSignIn-iOS"),
       ]),
+      .target(name: "Services"),
     ]
 )

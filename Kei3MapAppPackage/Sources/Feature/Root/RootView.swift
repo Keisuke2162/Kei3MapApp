@@ -8,13 +8,11 @@ import FirebaseFirestore
 
 @MainActor
 public class RootViewModel: ObservableObject {
-//  @Published var isLoading: Bool = false
-//  @Published var account: Account?
   @Published var isShowCreateAccountView: Bool = false
   @Published var showPageType: PageType = .loading
-  
+
   private let db = Firestore.firestore()
-  
+
   public enum PageType {
     case loading
     case map(Account)
@@ -52,7 +50,6 @@ public class RootViewModel: ObservableObject {
       return
     }
     
-    print("テスト \(currentUser.uid)")
     // プロフィール取得
     let docRef = db.collection("users").document(currentUser.uid)
     do {

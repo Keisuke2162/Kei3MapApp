@@ -6,8 +6,7 @@ import Foundation
 import UIKit
 import _PhotosUI_SwiftUI
 
-
-protocol PostRepositoryProtocol: AnyObject {
+public protocol PostRepositoryProtocol: AnyObject {
   func postImage(image: UIImage) async throws -> URL
   func post(account: Account, title: String, imageURL: URL, photoLocation: CLLocationCoordinate2D, addressText: String) async throws
 }
@@ -18,7 +17,10 @@ public enum PostError: Error {
 }
 
 public class PostRepository: PostRepositoryProtocol {
-  func postImage(image: UIImage) async throws -> URL {
+  public init() {
+  }
+
+  public func postImage(image: UIImage) async throws -> URL {
     let storageRef = Storage.storage().reference().child("post_images/\(UUID().uuidString).jpg")
 
     guard let imageData = image.jpegData(compressionQuality: 0.75) else {
@@ -30,7 +32,7 @@ public class PostRepository: PostRepositoryProtocol {
     return imageURL
   }
 
-  func post(account: Account, title: String, imageURL: URL, photoLocation: CLLocationCoordinate2D, addressText: String) async throws {
+  public func post(account: Account, title: String, imageURL: URL, photoLocation: CLLocationCoordinate2D, addressText: String) async throws {
     let data: [String: Any] = [
       "userID": account.userID,
       "postText": title,
