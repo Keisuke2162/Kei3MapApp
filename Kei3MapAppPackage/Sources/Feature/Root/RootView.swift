@@ -21,8 +21,8 @@ public struct RootView: View {
         SigninView(viewModel: SigninViewModel(onLoggedIn: viewModel.onSignedin))
       }
     }
-    .task {
-      await viewModel.onAppear()
+    .onAppear {
+      viewModel.onAppear()
     }
     .sheet(isPresented: $viewModel.isShowCreateAccountView) {
       NavigationStack {

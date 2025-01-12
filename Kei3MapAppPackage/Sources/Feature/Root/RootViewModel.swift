@@ -1,9 +1,11 @@
 import Entity
 import FirebaseAuth
 import FirebaseFirestore
+import Repository
 
 @MainActor
 public class RootViewModel: ObservableObject {
+  private let accountManageRepository: AccountManageRepositoryProtocol = AccountManageRepository()
   @Published var isShowCreateAccountView: Bool = false
   @Published var showPageType: PageType = .loading
 
@@ -18,52 +20,35 @@ public class RootViewModel: ObservableObject {
   public init() {
   }
 
-  func onAppear() async {
-     await signin()
+  func onAppear() {
+    signIn()
   }
 
   // サインイン完了後処理
   func onSignedin() {
-    Task {
-      await signin()
-    }
+    signIn()
   }
   
   // アカウント作成完了後処理
   func onCreatedAccount() {
     isShowCreateAccountView = false
-    Task {
-      await signin()
-    }
+    signIn()
   }
-
-  // サインイン処理
-  private func signin() async {
-    showPageType = .loading
-    guard let currentUser = Auth.auth().currentUser else {
-      // アカウントがなければサインイン画面を表示
-      showPageType = .signin
-      return
-    }
-    
-    // プロフィール取得
-    let docRef = db.collection("users").document(currentUser.uid)
-    do {
-      let document = try await docRef.getDocument()
-      guard let data = document.data() else {
-        // アカウント情報が取得できなければアカウント作成画面を表示
+  
+  func signIn() {
+    Task {
+      showPageType = .loading
+      do {
+        if let account = try await accountManageRepository.signin() {
+          showPageType = .map(account)
+        } else {
+          // アカウントがなければサインイン（サインアップ）画面へ
+          showPageType = .signin
+        }
+      } catch {
+        // エラー処理
         isShowCreateAccountView = true
-        return
       }
-      let userName = data["name"] as? String ?? ""
-      let profileImageURL = URL(string: data["thumbnailURL"] as? String ?? "")
-
-      let account = Account(userID: currentUser.uid, userName: userName, userProfileImageURL: profileImageURL)
-      
-      showPageType = .map(account)
-    } catch {
-      // アカウント情報が取得できなければアカウント作成画面を表示
-      isShowCreateAccountView = true
     }
   }
 }
