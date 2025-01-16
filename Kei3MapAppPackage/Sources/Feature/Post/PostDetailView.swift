@@ -4,11 +4,13 @@ import Kingfisher
 
 public struct PostDetailView: View {
   let postItem: Post
+  let onTapSearchRoute: () -> Void
   let gradientView: LinearGradient = .init(gradient: Gradient(colors: [.red, .green, .blue]), startPoint: .topLeading, endPoint: .bottomTrailing)
   @Environment(\.dismiss) var dismiss
 
-  public init(postItem: Post) {
+  public init(postItem: Post, onTapSearchRoute: @escaping () -> Void) {
     self.postItem = postItem
+    self.onTapSearchRoute = onTapSearchRoute
   }
 
   public var body: some View {
@@ -40,6 +42,7 @@ public struct PostDetailView: View {
       .padding(.leading, 16)
       
       Button {
+        onTapSearchRoute()
         dismiss()
       } label: {
         Text("経路案内🚶")

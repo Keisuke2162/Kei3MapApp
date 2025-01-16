@@ -5,8 +5,6 @@ import _MapKit_SwiftUI
 
 public struct MapView: View {
   @StateObject var viewModel: MapViewModel
-  
-  @State private var selectedItem: Post?
 
   public init(viewModel: MapViewModel) {
     _viewModel = StateObject(wrappedValue: viewModel)
@@ -27,7 +25,7 @@ public struct MapView: View {
               Annotation("", coordinate: post.coordinate) {
                 if let item = post.items.first {
                   Button {
-                    selectedItem = item
+                    viewModel.selectedItem = item
                   } label: {
                     ThumbnailAnnotationView(imageURL: item.postImageURL)
                   }
@@ -37,6 +35,13 @@ public struct MapView: View {
               }
             }
           }
+          
+          if let route = viewModel.route {
+            MapPolyline(route)
+              .stroke(.indigo, lineWidth: 10)
+          }
+
+          UserAnnotation()
         }
         .mapStyle(.standard)
         .onMapCameraChange {
@@ -69,8 +74,8 @@ public struct MapView: View {
         let viewModel = viewModel.createPostViewModel()
         PostView(viewModel: viewModel)
       })
-      .sheet(item: $selectedItem) { item in
-        PostDetailView(postItem: item)
+      .sheet(item: $viewModel.selectedItem) { item in
+        PostDetailView(postItem: item, onTapSearchRoute: viewModel.searchRoute)
           .presentationDetents(
             [.height(200)]
           )

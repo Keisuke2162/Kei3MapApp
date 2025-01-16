@@ -1,7 +1,7 @@
 import Foundation
 import MapKit
 
-public struct Post: Codable, Identifiable {
+public struct Post: Codable, Identifiable, Equatable {
   public var id = UUID()
 
   public let userID: String
