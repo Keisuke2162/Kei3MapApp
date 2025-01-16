@@ -1,9 +1,12 @@
 import SwiftUI
+import Entity
 import Kingfisher
 import _MapKit_SwiftUI
 
 public struct MapView: View {
   @StateObject var viewModel: MapViewModel
+  
+  @State private var selectedItem: Post?
 
   public init(viewModel: MapViewModel) {
     _viewModel = StateObject(wrappedValue: viewModel)
@@ -23,8 +26,8 @@ public struct MapView: View {
               // サムネイルを表示
               Annotation("", coordinate: post.coordinate) {
                 if let item = post.items.first {
-                  NavigationLink {
-                    PostDetailView(postItem: item)
+                  Button {
+                    selectedItem = item
                   } label: {
                     ThumbnailAnnotationView(imageURL: item.postImageURL)
                   }
@@ -66,6 +69,12 @@ public struct MapView: View {
         let viewModel = viewModel.createPostViewModel()
         PostView(viewModel: viewModel)
       })
+      .sheet(item: $selectedItem) { item in
+        PostDetailView(postItem: item)
+          .presentationDetents(
+            [.height(200)]
+          )
+      }
     }
     .ignoresSafeArea()
     .toolbar(.hidden, for: .navigationBar)
