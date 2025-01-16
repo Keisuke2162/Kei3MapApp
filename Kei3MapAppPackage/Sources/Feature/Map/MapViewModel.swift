@@ -20,6 +20,10 @@ public class MapViewModel: ObservableObject {
   @Published var position: MapCameraPosition
   @Published var displayItems: [DisplayPostItem] = []
   @Published var isShowPostView: Bool = false
+  
+  // 経路
+  @Published var selectedItem: Post?
+  @Published var route: MKRoute?
 
   let account: Account
   var postItems: [Post] = []
@@ -145,5 +149,21 @@ public class MapViewModel: ObservableObject {
       let midLon = lon1 + atan2(by, cos(lat1) + bx)
 
       return CLLocationCoordinate2D(latitude: midLat.degrees, longitude: midLon.degrees)
+  }
+
+  // ある地点（スカイツリー）から選択したMarkerへの移動経路
+  func searchRoute() {
+    route = nil
+    guard let selectedItem else { return }
+
+    let request = MKDirections.Request()
+    request.source = MKMapItem.forCurrentLocation()
+    request.destination = MKMapItem(placemark: MKPlacemark(coordinate: .init(latitude: selectedItem.latitude, longitude: selectedItem.longitude)))
+
+    Task {
+      let direction = MKDirections(request: request)
+      let response = try? await direction.calculate()
+      route = response?.routes.first
+    }
   }
 }
