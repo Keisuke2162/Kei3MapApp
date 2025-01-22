@@ -21,8 +21,11 @@ public class MapViewModel: ObservableObject {
   @Published var displayItems: [DisplayPostItem] = []
   @Published var isShowPostView: Bool = false
   
-  // 経路
+  // 選択した投稿
   @Published var selectedItem: Post?
+  // 選択したPOI
+  @Published var selectedMapItem: MKMapItem?
+  // 選択した場所への経路情報
   @Published var route: MKRoute?
 
   let account: Account
@@ -59,6 +62,26 @@ public class MapViewModel: ObservableObject {
       postItems = posts
       self.displayItems = posts.map {
         .init(coordinate: .init(latitude: $0.latitude, longitude: $0.longitude), items: [$0])
+      }
+    }
+  }
+
+  
+  func onTapMap(coordinate: CLLocationCoordinate2D) {
+    Task {
+      let request = MKLocalPointsOfInterestRequest(center: coordinate, radius: 50)
+      request.pointOfInterestFilter = nil
+  
+      do {
+        let search = MKLocalSearch(request: request)
+        let response = try await search.start()
+        
+        // TODO: カメラをselectedMapItemに寄せたい
+        self.selectedMapItem = response.mapItems.first
+        
+        response.mapItems.first.
+      } catch {
+        print("Failed Lookup POI \(error.localizedDescription)")
       }
     }
   }
