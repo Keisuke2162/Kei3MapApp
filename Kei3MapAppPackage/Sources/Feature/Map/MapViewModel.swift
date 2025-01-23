@@ -21,8 +21,13 @@ public class MapViewModel: ObservableObject {
   @Published var displayItems: [DisplayPostItem] = []
   @Published var isShowPostView: Bool = false
   
-  // 経路
+  // 選択した投稿
   @Published var selectedItem: Post?
+  // 選択したPOI
+  var selectedMapItem: MKMapItem?
+  // MKMapItemはIdentifirebleではないのでsheetの表示管理はBoolで行う
+  @Published var showMapItemSheet: Bool = false
+  // 選択した場所への経路情報
   @Published var route: MKRoute?
 
   let account: Account
@@ -59,6 +64,29 @@ public class MapViewModel: ObservableObject {
       postItems = posts
       self.displayItems = posts.map {
         .init(coordinate: .init(latitude: $0.latitude, longitude: $0.longitude), items: [$0])
+      }
+    }
+  }
+
+  
+  func onTapMap(coordinate: CLLocationCoordinate2D) {
+    Task {
+      let request = MKLocalPointsOfInterestRequest(center: coordinate, radius: 50)
+      request.pointOfInterestFilter = nil
+  
+      do {
+        let search = MKLocalSearch(request: request)
+        let response = try await search.start()
+        guard let mapItem = response.mapItems.first else { return }
+        await MainActor.run {
+          self.position = .region(
+            MKCoordinateRegion(center: coordinate, latitudinalMeters: 100, longitudinalMeters: 100)
+          )
+          self.selectedMapItem = mapItem
+          self.showMapItemSheet = true
+        }
+      } catch {
+        print("Failed Lookup POI \(error.localizedDescription)")
       }
     }
   }
@@ -151,7 +179,8 @@ public class MapViewModel: ObservableObject {
       return CLLocationCoordinate2D(latitude: midLat.degrees, longitude: midLon.degrees)
   }
 
-  // ある地点（スカイツリー）から選択したMarkerへの移動経路
+  // 経路検索
+  // TODO: POIの方も経路検索できるようにする
   func searchRoute() {
     route = nil
     guard let selectedItem else { return }
