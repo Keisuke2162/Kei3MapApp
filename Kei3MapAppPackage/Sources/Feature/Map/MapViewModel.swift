@@ -24,7 +24,9 @@ public class MapViewModel: ObservableObject {
   // 選択した投稿
   @Published var selectedItem: Post?
   // 選択したPOI
-  @Published var selectedMapItem: MKMapItem?
+  var selectedMapItem: MKMapItem?
+  // MKMapItemはIdentifirebleではないのでsheetの表示管理はBoolで行う
+  @Published var showMapItemSheet: Bool = false
   // 選択した場所への経路情報
   @Published var route: MKRoute?
 
@@ -75,11 +77,14 @@ public class MapViewModel: ObservableObject {
       do {
         let search = MKLocalSearch(request: request)
         let response = try await search.start()
-        
-        // TODO: カメラをselectedMapItemに寄せたい
-        self.selectedMapItem = response.mapItems.first
-        
-        response.mapItems.first.
+        guard let mapItem = response.mapItems.first else { return }
+        await MainActor.run {
+          self.position = .region(
+            MKCoordinateRegion(center: coordinate, latitudinalMeters: 100, longitudinalMeters: 100)
+          )
+          self.selectedMapItem = mapItem
+          self.showMapItemSheet = true
+        }
       } catch {
         print("Failed Lookup POI \(error.localizedDescription)")
       }
@@ -174,7 +179,8 @@ public class MapViewModel: ObservableObject {
       return CLLocationCoordinate2D(latitude: midLat.degrees, longitude: midLon.degrees)
   }
 
-  // ある地点（スカイツリー）から選択したMarkerへの移動経路
+  // 経路検索
+  // TODO: POIの方も経路検索できるようにする
   func searchRoute() {
     route = nil
     guard let selectedItem else { return }

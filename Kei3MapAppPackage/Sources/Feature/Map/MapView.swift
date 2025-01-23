@@ -15,12 +15,10 @@ public struct MapView: View {
       ZStack {
         MapReader { reader in
           Map(position: $viewModel.position, interactionModes: .all) {
-            
-            
             // 投稿を表示
             ForEach(viewModel.displayItems) { post in
+              // クラスタリング
               if post.items.count > 1 {
-                // クラスタリング用のViewを表示
                 Annotation("", coordinate: post.coordinate) {
                   ClusterAnnotationView(count: post.items.count)
                 }
@@ -40,6 +38,7 @@ public struct MapView: View {
               }
             }
             
+            // 経路を表示
             if let route = viewModel.route {
               MapPolyline(route)
                 .stroke(.indigo, lineWidth: 10)
@@ -47,6 +46,7 @@ public struct MapView: View {
 
             UserAnnotation()
           }
+          .animation(.smooth, value: viewModel.position)
           .mapStyle(.standard)
           .onMapCameraChange {
             // 再描画走るので一旦コメントアウト
@@ -87,12 +87,19 @@ public struct MapView: View {
         PostView(viewModel: viewModel)
       })
       .sheet(item: $viewModel.selectedItem) { item in
-        PostDetailView(postItem: item, onTapSearchRoute: viewModel.searchRoute)
+        MapItemInformationSheet(postImageURL: item.postImageURL, address: item.addressString, description: item.postText, onTapSearchRoute: viewModel.searchRoute)
           .presentationDetents(
             [.height(200)]
           )
       }
-      
+      .sheet(isPresented: $viewModel.showMapItemSheet, content: {
+        if let item = viewModel.selectedMapItem {
+          MapItemInformationSheet(address: item.name ?? "", description: "", onTapSearchRoute: viewModel.searchRoute)
+            .presentationDetents(
+              [.height(200)]
+            )
+        }
+      })
     }
     .ignoresSafeArea()
     .toolbar(.hidden, for: .navigationBar)
