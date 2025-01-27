@@ -6,6 +6,35 @@ import SwiftUI
 import Repository
 import FirebaseFirestore
 
+public enum MenuItem: String, CaseIterable {
+  case post
+  case account
+  case setting
+  case postList
+  case favorite
+  case notification
+  case returnTop
+
+  var systemImageName: String {
+    switch self {
+    case .post:
+      "pencil"
+    case .account:
+      "person"
+    case .setting:
+      "gear"
+    case .postList:
+      "list.bullet"
+    case .favorite:
+      "star"
+    case .notification:
+      "app.badge"
+    case .returnTop:
+      "return"
+    }
+  }
+}
+
 public class MapViewModel: ObservableObject {
   // 現在位置取得できない場合のデフォルトの位置情報
   static let initialCoordinate2D = CLLocationCoordinate2D(latitude: 36.2048, longitude: 138.2529)
@@ -20,7 +49,8 @@ public class MapViewModel: ObservableObject {
   @Published var position: MapCameraPosition
   @Published var displayItems: [DisplayPostItem] = []
   @Published var isShowPostView: Bool = false
-  
+  @Published var isShowMenuView: Bool = false
+
   // 選択した投稿
   @Published var selectedItem: Post?
   // 選択したPOI
@@ -110,9 +140,28 @@ public class MapViewModel: ObservableObject {
     }
   }
 
-  // 投稿するボタンタップ
-  func onTapPostButton() {
-    isShowPostView = true
+  func onTapMenuButton() {
+    isShowMenuView = true
+  }
+  
+  func onSelectedMenu(type: MenuItem) {
+    switch type {
+    case .post:
+      // 投稿するボタンタップ
+      isShowPostView = true
+    case .account:
+      break
+    case .setting:
+      break
+    case .postList:
+      break
+    case .favorite:
+      break
+    case .notification:
+      break
+    case .returnTop:
+      break
+    }
   }
 
   // 投稿完了後

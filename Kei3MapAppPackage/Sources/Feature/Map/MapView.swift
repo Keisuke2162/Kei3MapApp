@@ -36,7 +36,7 @@ public struct MapView: View {
               }
             }
           }
-          
+
           // 経路を表示
           if let route = viewModel.route {
             MapPolyline(route)
@@ -64,13 +64,14 @@ public struct MapView: View {
           }
         })
       }
-      
+      .ignoresSafeArea()
+
       HStack {
         Spacer()
         VStack {
           Spacer()
           Button {
-            viewModel.onTapPostButton()
+            viewModel.onTapMenuButton()
           } label: {
             Image(systemName: "pencil.and.scribble")
           }
@@ -79,8 +80,12 @@ public struct MapView: View {
           .clipShape(Circle())
           .padding(16)
         }
+        Spacer()
       }
     }
+    .fullScreenCover(isPresented: $viewModel.isShowMenuView, content: {
+      MapMenuView(onSelectItem: viewModel.onSelectedMenu(type:))
+    })
     .fullScreenCover(isPresented: $viewModel.isShowPostView, content: {
       let viewModel = viewModel.createPostViewModel()
       PostView(viewModel: viewModel)
@@ -99,7 +104,6 @@ public struct MapView: View {
           )
       }
     })
-    .ignoresSafeArea()
     .toolbar(.hidden, for: .navigationBar)
   }
 
