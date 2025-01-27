@@ -15,8 +15,7 @@ public struct RootView: View {
       case .loading:
         ProgressView()
       case .map(let account):
-        let viewModel = MapViewModel(account: account)
-        MapView(viewModel: viewModel)
+        SelectMapView(account: account)
       case .signin:
         SigninView(viewModel: SigninViewModel(onLoggedIn: viewModel.onSignedin))
       }

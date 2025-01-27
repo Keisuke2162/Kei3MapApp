@@ -11,101 +11,98 @@ public struct MapView: View {
   }
 
   public var body: some View {
-    NavigationStack {
-      ZStack {
-        MapReader { reader in
-          Map(position: $viewModel.position, interactionModes: .all) {
-            // 投稿を表示
-            ForEach(viewModel.displayItems) { post in
-              // クラスタリング
-              if post.items.count > 1 {
-                Annotation("", coordinate: post.coordinate) {
-                  ClusterAnnotationView(count: post.items.count)
-                }
-              } else {
-                // サムネイルを表示
-                Annotation("", coordinate: post.coordinate) {
-                  if let item = post.items.first {
-                    Button {
-                      viewModel.selectedItem = item
-                    } label: {
-                      ThumbnailAnnotationView(imageURL: item.postImageURL)
-                    }
-                  } else {
-                    Text("")
+    ZStack {
+      MapReader { reader in
+        Map(position: $viewModel.position, interactionModes: .all) {
+          // 投稿を表示
+          ForEach(viewModel.displayItems) { post in
+            // クラスタリング
+            if post.items.count > 1 {
+              Annotation("", coordinate: post.coordinate) {
+                ClusterAnnotationView(count: post.items.count)
+              }
+            } else {
+              // サムネイルを表示
+              Annotation("", coordinate: post.coordinate) {
+                if let item = post.items.first {
+                  Button {
+                    viewModel.selectedItem = item
+                  } label: {
+                    ThumbnailAnnotationView(imageURL: item.postImageURL)
                   }
+                } else {
+                  Text("")
                 }
               }
             }
-            
-            // 経路を表示
-            if let route = viewModel.route {
-              MapPolyline(route)
-                .stroke(.indigo, lineWidth: 10)
-            }
+          }
+          
+          // 経路を表示
+          if let route = viewModel.route {
+            MapPolyline(route)
+              .stroke(.indigo, lineWidth: 10)
+          }
 
-            UserAnnotation()
-          }
-          .animation(.smooth, value: viewModel.position)
-          .mapStyle(.standard)
-          .onMapCameraChange {
-            // 再描画走るので一旦コメントアウト
-            // viewModel.updateZoomLevel($0.camera.distance)
-          }
-          .mapControls {
-            MapUserLocationButton()
-          }
-          .onAppear {
-            viewModel.onAppear()
-          }
-          .onTapGesture(perform: { screenCoord in
-            if let coordinate = reader.convert(screenCoord, from: .local) {
-              // タップした箇所の説明を取得
-              viewModel.onTapMap(coordinate: coordinate)
-            }
-          })
+          UserAnnotation()
         }
-        
-        HStack {
-          Spacer()
-          VStack {
-            Spacer()
-            Button {
-              viewModel.onTapPostButton()
-            } label: {
-              Image(systemName: "pencil.and.scribble")
-            }
-            .frame(width: 56, height: 56)
-            .background(Color.white)
-            .clipShape(Circle())
-            .padding(16)
+        .animation(.smooth, value: viewModel.position)
+        .mapStyle(.standard)
+        .onMapCameraChange {
+          // 再描画走るので一旦コメントアウト
+          // viewModel.updateZoomLevel($0.camera.distance)
+        }
+        .mapControls {
+          MapUserLocationButton()
+        }
+        .onAppear {
+          viewModel.onAppear()
+        }
+        .onTapGesture(perform: { screenCoord in
+          if let coordinate = reader.convert(screenCoord, from: .local) {
+            // タップした箇所の説明を取得
+            viewModel.onTapMap(coordinate: coordinate)
           }
+        })
+      }
+      
+      HStack {
+        Spacer()
+        VStack {
+          Spacer()
+          Button {
+            viewModel.onTapPostButton()
+          } label: {
+            Image(systemName: "pencil.and.scribble")
+          }
+          .frame(width: 56, height: 56)
+          .background(Color.white)
+          .clipShape(Circle())
+          .padding(16)
         }
       }
-      .fullScreenCover(isPresented: $viewModel.isShowPostView, content: {
-        let viewModel = viewModel.createPostViewModel()
-        PostView(viewModel: viewModel)
-      })
-      .sheet(item: $viewModel.selectedItem) { item in
-        MapItemInformationSheet(postImageURL: item.postImageURL, address: item.addressString, description: item.postText, onTapSearchRoute: viewModel.searchRoute)
+    }
+    .fullScreenCover(isPresented: $viewModel.isShowPostView, content: {
+      let viewModel = viewModel.createPostViewModel()
+      PostView(viewModel: viewModel)
+    })
+    .sheet(item: $viewModel.selectedItem) { item in
+      MapItemInformationSheet(postImageURL: item.postImageURL, address: item.addressString, description: item.postText, onTapSearchRoute: viewModel.searchRoute)
+        .presentationDetents(
+          [.height(200)]
+        )
+    }
+    .sheet(isPresented: $viewModel.showMapItemSheet, content: {
+      if let item = viewModel.selectedMapItem {
+        MapItemInformationSheet(address: item.name ?? "", description: "", onTapSearchRoute: viewModel.searchRoute)
           .presentationDetents(
             [.height(200)]
           )
       }
-      .sheet(isPresented: $viewModel.showMapItemSheet, content: {
-        if let item = viewModel.selectedMapItem {
-          MapItemInformationSheet(address: item.name ?? "", description: "", onTapSearchRoute: viewModel.searchRoute)
-            .presentationDetents(
-              [.height(200)]
-            )
-        }
-      })
-    }
+    })
     .ignoresSafeArea()
     .toolbar(.hidden, for: .navigationBar)
   }
-  
-  
+
   // クラスタリング用のAnnotationView
   struct ClusterAnnotationView: View {
       let count: Int
