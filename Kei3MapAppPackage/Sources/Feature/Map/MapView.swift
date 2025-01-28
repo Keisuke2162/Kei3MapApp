@@ -65,27 +65,44 @@ public struct MapView: View {
         })
       }
       .ignoresSafeArea()
-
-      HStack {
+      
+//      if viewModel.isShowMenuView {
+//        Color.black.opacity(0.5)
+//          .ignoresSafeArea()
+//          .transition(.opacity)
+//      }
+      
+      // Menu
+      Color.black
+        .opacity(viewModel.isShowMenuView ? 0.5 : 0)
+        .ignoresSafeArea()
+        .transition(.opacity)
+      VStack(alignment: .center) {
         Spacer()
-        VStack {
-          Spacer()
-          Button {
-            viewModel.onTapMenuButton()
-          } label: {
-            Image(systemName: "pencil.and.scribble")
+        
+        if viewModel.isShowMenuView {
+          MapMenuView { menuType in
+            viewModel.onSelectedMenu(type: menuType)
           }
-          .frame(width: 56, height: 56)
-          .background(Color.white)
-          .clipShape(Circle())
-          .padding(16)
+          .transition(.opacity)
         }
-        Spacer()
+
+        Button {
+          withAnimation(.easeInOut(duration: 0.5)) {
+            viewModel.isShowMenuView.toggle()
+          }
+        } label: {
+          Image(systemName: viewModel.isShowMenuView ? "xmark" : "filemenu.and.cursorarrow")
+        }
+        .frame(width: 56, height: 56)
+        .background(Color.white)
+        .clipShape(Circle())
+        .padding(16)
       }
     }
-    .fullScreenCover(isPresented: $viewModel.isShowMenuView, content: {
-      MapMenuView(onSelectItem: viewModel.onSelectedMenu(type:))
-    })
+//    .fullScreenCover(isPresented: $viewModel.isShowMenuView, content: {
+//      MapMenuView(onSelectItem: viewModel.onSelectedMenu(type:))
+//    })
     .fullScreenCover(isPresented: $viewModel.isShowPostView, content: {
       let viewModel = viewModel.createPostViewModel()
       PostView(viewModel: viewModel)

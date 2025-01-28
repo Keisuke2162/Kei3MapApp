@@ -1,8 +1,6 @@
 import SwiftUI
 
 public struct MapMenuView: View {
-  @Environment(\.dismiss) var dismiss
-
   let columns = [GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible())]
   
   let onSelectItem: (MenuItem) -> Void
@@ -20,7 +18,6 @@ public struct MapMenuView: View {
         LazyVGrid(columns: columns, alignment: .center, spacing: 16) {
           ForEach(MenuItem.allCases, id: \.self) { item in
             Button {
-              dismiss()
               onSelectItem(item)
             } label: {
               VStack {
@@ -37,22 +34,7 @@ public struct MapMenuView: View {
           }
         }
         .padding(.horizontal, 16)
-        
         Spacer()
-        
-        HStack {
-          Spacer()
-          Button {
-            dismiss()
-          } label: {
-            Image(systemName: "pencil.and.scribble")
-          }
-          .frame(width: 56, height: 56)
-          .background(Color.white)
-          .clipShape(Circle())
-          .padding(16)
-          Spacer()
-        }
       }
     }
   }
